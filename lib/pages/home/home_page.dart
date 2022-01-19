@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:the_movie/pages/detail/movie_detail.dart';
 import 'package:the_movie/pages/home/now_playing_view.dart';
 import 'package:the_movie/pages/home/popular_view.dart';
 import 'package:the_movie/pages/home/top_rated_view.dart';
@@ -13,11 +14,6 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String username = 'Guest';
-
-    const String image =
-        'https://image.tmdb.org/t/p/w500/jOuCWdh0BE6XPu2Vpjl08wDAeFz.jpg';
-    const String image2 =
-        'https://image.tmdb.org/t/p/w500/qtX2Fg9MTmrbgN1UUvGoCsImTM8.jpg';
 
     return Scaffold(
       body: SafeArea(
@@ -33,7 +29,9 @@ class HomePage extends StatelessWidget {
               ),
               OfficialTrailerCard(
                 image: image,
-                onGotoDetail: () => print('detail'),
+                onGotoDetail: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const MovieDetailPage()),
+                ),
                 onPlayMovie: () => print('play'),
               ),
               const Padding(
