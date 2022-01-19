@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:the_movie/pages/pages.dart';
 import 'package:the_movie/values/values.dart';
 import 'package:the_movie/widgets/widgets.dart';
 import 'package:readmore/readmore.dart';
@@ -14,6 +15,11 @@ class MovieDetailPage extends StatelessWidget {
         'Rey (Daisy Ridley) finally manages to find the legendary Jedi knight, Luke Skywalker (Mark Hamill) on an island with a magical aura. The heroes of The Force Awakens including Leia, Finn';
 
     return Scaffold(
+      floatingActionButton: Container(
+        margin: const EdgeInsets.only(top: 15.0),
+        child: const GoBackButton(),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -133,7 +139,9 @@ class MovieDetailPage extends StatelessWidget {
                         const Text('Cast & Crew', style: kTextSize20w500White),
                         const Spacer(),
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) => CastAndCrewPage())
+                          ),
                           child: const Text(
                             'More...',
                             style: kTextSize15w400White,
