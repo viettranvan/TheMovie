@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:the_movie/pages/detail/movie_detail_page.dart';
-import 'package:the_movie/pages/home/home_page.dart';
+import 'package:the_movie/pages/pages.dart';
 import 'package:the_movie/values/values.dart';
 
 void main() {
@@ -21,7 +20,7 @@ class TheMovieApp extends StatelessWidget {
         fontFamily: "Lato",
           scaffoldBackgroundColor: AppColor.background
       ),
-      home: const HomePage(),
+      home: MainPage(),
     );
   }
 }

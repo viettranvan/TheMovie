@@ -13,3 +13,12 @@ export 'home/top_rated_view.dart';
 export 'detail/cast_detail_page.dart';
 export 'detail/crew_detail_page.dart';
 export 'detail/movie_detail_page.dart';
+
+///  Profile Page
+export 'profile/profile_page.dart';
+
+///  Discover Page
+export 'discover/discover_page.dart';
+
+
+export 'main_page.dart';

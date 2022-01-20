@@ -5,8 +5,14 @@ import 'package:the_movie/widgets/widgets.dart';
 class CrewDetailPage extends StatelessWidget {
   const CrewDetailPage({Key? key}) : super(key: key);
 
+
+
   @override
   Widget build(BuildContext context) {
+
+    int gender = 2;
+    
+
     return Scaffold(
       floatingActionButton: const GoBackButton(),
       floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
@@ -42,11 +48,13 @@ class CrewDetailPage extends StatelessWidget {
 
                     Row(
                       children: [
-                        Text('Gender: Not specified',style: kTextSize15w400White),
-                        Icon(Icons.nature_people_outlined,color: AppColor.white),
+                        Text('Gender:${getGender(gender)}',style: kTextSize15w400White),
+                        const SizedBox(width: 5.0),
+                        Icon(getIconDataGender(gender),color: AppColor.white),
                         const SizedBox(width: 25.0),
 
                         Text('Popularity: 88.125',style: kTextSize15w400White),
+                        const SizedBox(width: 5.0),
                         const Icon(Icons.star,color: AppColor.white),
                       ],
                     ),
