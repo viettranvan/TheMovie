@@ -1,7 +1,9 @@
 export 'back_button.dart';
 export 'button_play.dart';
 export 'cast_and_crew_card.dart';
+export 'custom_dialog.dart';
 export 'display_resolution_4k.dart';
+export 'error_message_box.dart';
 export 'genre_item.dart';
 export 'home_movie_card.dart';
 export 'horizontal_divider.dart';

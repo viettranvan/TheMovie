@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:the_movie/pages/pages.dart';
 import 'package:the_movie/values/values.dart';
 import 'package:the_movie/widgets/widgets.dart';
 
@@ -100,7 +101,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 const SizedBox(height: 10.0),
                 ReusableButton(
-                  onTap: () {},
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => const ChangePasswordPage())
+                  ),
                   buttonTitle: 'Change Password',
                   buttonColor: AppColor.green,
                 ),

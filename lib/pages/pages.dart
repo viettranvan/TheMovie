@@ -16,6 +16,7 @@ export 'detail/movie_detail_page.dart';
 
 ///  Profile Page
 export 'profile/profile_page.dart';
+export 'profile/change_password_page.dart';
 
 ///  Discover Page
 export 'discover/discover_page.dart';
