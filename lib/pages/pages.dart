@@ -21,5 +21,9 @@ export 'profile/change_password_page.dart';
 ///  Discover Page
 export 'discover/discover_page.dart';
 
+/// Auth Page
+export 'auth/login_page.dart';
+export 'auth/forgot_password_page.dart';
+export 'auth/sign_up_page.dart';
 
 export 'main_page.dart';

@@ -20,7 +20,7 @@ class TheMovieApp extends StatelessWidget {
         fontFamily: "Lato",
           scaffoldBackgroundColor: AppColor.background
       ),
-      home: MainPage(),
+      home: const LoginPage(),
     );
   }
 }
