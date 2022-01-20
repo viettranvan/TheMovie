@@ -15,10 +15,7 @@ class MovieDetailPage extends StatelessWidget {
         'Rey (Daisy Ridley) finally manages to find the legendary Jedi knight, Luke Skywalker (Mark Hamill) on an island with a magical aura. The heroes of The Force Awakens including Leia, Finn';
 
     return Scaffold(
-      floatingActionButton: Container(
-        margin: const EdgeInsets.only(top: 15.0),
-        child: const GoBackButton(),
-      ),
+      floatingActionButton: const GoBackButton(),
       floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
       body: SafeArea(
         child: SingleChildScrollView(

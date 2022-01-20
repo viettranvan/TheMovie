@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:the_movie/cast_and_crew/cast_view.dart';
+import 'package:the_movie/pages/cast_and_crew/cast_view.dart';
 import 'package:the_movie/pages/pages.dart';
 import 'package:the_movie/values/values.dart';
 import 'package:the_movie/widgets/widgets.dart';

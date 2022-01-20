@@ -6,10 +6,13 @@ class GoBackButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton(
-      onPressed: () => Navigator.of(context).pop(),
-      child: const Icon(Icons.arrow_back,size: 30.0,color: AppColor.white),
-      backgroundColor: AppColor.blur,
+    return Container(
+      margin: const EdgeInsets.only(top: 15.0),
+      child: FloatingActionButton(
+        onPressed: () => Navigator.of(context).pop(),
+        child: const Icon(Icons.arrow_back,size: 30.0,color: AppColor.white),
+        backgroundColor: AppColor.blur,
+      ),
     );
   }
 }

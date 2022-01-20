@@ -1,7 +1,5 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:the_movie/pages/detail/movie_detail.dart';
+import 'package:the_movie/pages/pages.dart';
 import 'package:the_movie/pages/home/now_playing_view.dart';
 import 'package:the_movie/pages/home/popular_view.dart';
 import 'package:the_movie/pages/home/top_rated_view.dart';
