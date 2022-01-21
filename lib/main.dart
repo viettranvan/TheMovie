@@ -19,8 +19,9 @@ class TheMovieApp extends StatelessWidget {
         brightness: Brightness.dark,
         fontFamily: "Lato",
           scaffoldBackgroundColor: AppColor.background
+
       ),
-      home: const LoginPage(),
+      home: const MainPage(),
     );
   }
 }

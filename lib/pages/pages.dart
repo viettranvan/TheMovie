@@ -20,6 +20,10 @@ export 'profile/change_password_page.dart';
 
 ///  Discover Page
 export 'discover/discover_page.dart';
+export 'discover/documentary_view.dart';
+export 'discover/movie_view.dart';
+export 'discover/sports_view.dart';
+export 'discover/tv_series_view.dart';
 
 /// Auth Page
 export 'auth/login_page.dart';

@@ -10,6 +10,8 @@ class AppColor{
 
   static const Color blur = Color.fromRGBO(218, 218, 218, 0.3);
   static  Color genreItemColor = const Color(0xffFAF0CA).withOpacity(0.05);
+  static const Color searchTextField = Color(0xff211F30);
+
 
   static const Color white = Color(0xffffffff);
   static Color white25 = const Color(0xffffffff).withOpacity(0.25);
