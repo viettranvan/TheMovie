@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:the_movie/pages/auth/login_page.dart';
+import 'package:the_movie/validation/validation.dart';
 import 'package:the_movie/values/values.dart';
 import 'package:the_movie/widgets/widgets.dart';
 
@@ -13,6 +15,30 @@ class ForgotPasswordPage extends StatefulWidget {
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final _emailController = TextEditingController();
 
+  String errorMessage = '';
+  void onSendEmail()async{
+    String email = _emailController.text;
+    if(email.isEmpty){
+      setState(() {
+        errorMessage = 'Email is required';
+      });
+    }else{
+      bool validEmail = Validation().validatorEmail(email);
+      if(!validEmail){
+        setState(() {
+          errorMessage = 'Incorrect email format';
+        });
+      }else{
+        FirebaseAuth _auth = FirebaseAuth.instance;
+        try{
+          await _auth.sendPasswordResetEmail(email: email);
+        }catch(e){
+          print('error: $e');
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +49,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 20.0),
+                const SizedBox(height: 10.0),
                 Center(
                     child: Text('THE MOVIE',
                         style: kTextSize30w400White.copyWith(
@@ -43,7 +69,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     child: Text('Forgot password',
                         style: kTextSize30w400White.copyWith(
                             fontWeight: FontWeight.bold))),
-                const SizedBox(height: 30.0),
+                const SizedBox(height: 20.0),
+                ErrorMessageBox(message: errorMessage),
+                const SizedBox(height: 10.0),
                 const Text('Email', style: kTextSize20w400White),
                 const SizedBox(height: 10.0),
                 ReusableTextField(
@@ -54,7 +82,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 ),
                 const SizedBox(height: 20.0),
                 ReusableButton(
-                  onTap: () {},
+                  onTap: () => onSendEmail(),
                   buttonTitle: 'Send',
                   buttonColor: AppColor.red,
                 ),

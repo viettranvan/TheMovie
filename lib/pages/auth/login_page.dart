@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:the_movie/pages/pages.dart';
+import 'package:the_movie/validation/validation.dart';
 import 'package:the_movie/values/values.dart';
 import 'package:the_movie/widgets/widgets.dart';
 
@@ -16,6 +18,56 @@ class _LoginPageState extends State<LoginPage> {
 
   bool obscureText = true;
 
+  String errorMessage = '';
+
+  void onLogin() async {
+    String email = _emailController.text;
+    String pass = _passwordController.text;
+
+    if (email.isEmpty) {
+      if (pass.isEmpty) {
+        setState(() {
+          errorMessage = 'Email is required!\nPassword is required!';
+        });
+      } else {
+        setState(() {
+          errorMessage = 'Email is required!';
+        });
+      }
+    } else {
+      if (pass.isEmpty) {
+        setState(() {
+          errorMessage = 'Password is required!';
+        });
+      } else {
+        bool validEmail = Validation().validatorEmail(email);
+        if (!validEmail) {
+          setState(() {
+            errorMessage = 'Incorrect email format';
+          });
+        } else {
+          setState(() {
+            errorMessage = '';
+          });
+
+          try {
+            FirebaseAuth _auth = FirebaseAuth.instance;
+            print('vao dc day');
+            await _auth.signInWithEmailAndPassword(
+                email: email, password: pass);
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const MainPage())
+              );
+          } catch (e) {
+            print('error: $e');
+          }
+        }
+      }
+    }
+
+    print('email: $email\npass: $pass');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 50.0),
+                  const SizedBox(height: 10.0),
                   Center(
                       child: Text('THE MOVIE',
                           style: kTextSize30w400White.copyWith(
@@ -48,7 +100,9 @@ class _LoginPageState extends State<LoginPage> {
                       child: Text('Login',
                           style: kTextSize30w400White.copyWith(
                               fontWeight: FontWeight.bold))),
-                  const SizedBox(height: 30.0),
+                  const SizedBox(height: 20.0),
+                  ErrorMessageBox(message: errorMessage),
+                  const SizedBox(height: 10.0),
                   const Text('Email', style: kTextSize20w400White),
                   const SizedBox(height: 10.0),
                   ReusableTextField(
@@ -84,7 +138,8 @@ class _LoginPageState extends State<LoginPage> {
                       GestureDetector(
                         onTap: () => Navigator.of(context).push(
                             MaterialPageRoute(
-                                builder: (context) => const ForgotPasswordPage())),
+                                builder: (context) =>
+                                    const ForgotPasswordPage())),
                         child: const Text(
                           'Forgot password?',
                           style: kTextSize20w400Blue,
@@ -94,15 +149,11 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 20.0),
                   ReusableButton(
-                    onTap: () {},
+                    onTap: () => onLogin(),
                     buttonTitle: 'Login',
                     buttonColor: AppColor.red,
                   ),
                   const SizedBox(height: 20.0),
-                  // AnotherLogin(
-                  //   onGoggleLogin: () => print('Login google'),
-                  //   onFa
-                  // ),
                   AnotherLoginMethod(
                     onGoggleLogin: () {},
                     onFacebookLogin: () {},
@@ -118,8 +169,8 @@ class _LoginPageState extends State<LoginPage> {
                             onTap: () => Navigator.of(context).push(
                                 MaterialPageRoute(
                                     builder: (context) => const SignUpPage())),
-                            child:
-                                const Text('Sign Up', style: kTextSize18w400Red)),
+                            child: const Text('Sign Up',
+                                style: kTextSize18w400Red)),
                       ],
                     ),
                   ),

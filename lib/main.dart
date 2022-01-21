@@ -1,8 +1,12 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:the_movie/pages/pages.dart';
 import 'package:the_movie/values/values.dart';
 
-void main() {
+void main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const TheMovieApp());
 }
 
@@ -21,7 +25,7 @@ class TheMovieApp extends StatelessWidget {
           scaffoldBackgroundColor: AppColor.background
 
       ),
-      home: const MainPage(),
+      home: const LoginPage(),
     );
   }
 }
