@@ -1,3 +1,4 @@
+export 'authentication.dart';
 export 'movie.dart';
 export 'tv_series.dart';
 export 'genre.dart';

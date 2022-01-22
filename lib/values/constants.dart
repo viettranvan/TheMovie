@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:the_movie/values/app_styles.dart';
 import 'package:the_movie/values/values.dart';
@@ -68,4 +69,26 @@ Future<bool> onWillPop(BuildContext context) {
     return Future.value(false);
   }
   return Future.value(true);
+}
+
+String checkFirebaseAuthExceptionError(FirebaseAuthException error){
+  String result = '';
+  switch(error.code){
+    case 'user-not-found':
+      result = 'Your email provided is not registered!';
+      break;
+    case 'wrong-password':
+      result = 'Your password is incorrect!';
+      break;
+    case 'invalid-email':
+      result = 'Invalid email!';
+      break;
+    case 'email-already-in-use':
+      result = 'Email already in use. reset your password or log in!';
+      break;
+    default:
+      result = 'Login information is incorrect!';
+
+  }
+  return result;
 }

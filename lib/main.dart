@@ -1,7 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:the_movie/blocs/blocs.dart';
+import 'package:the_movie/pages/auth/sign_up_page.dart';
 import 'package:the_movie/pages/pages.dart';
 import 'package:the_movie/values/values.dart';
+
+import 'services/auth.dart';
 
 void main() async {
 
@@ -25,7 +30,25 @@ class TheMovieApp extends StatelessWidget {
           scaffoldBackgroundColor: AppColor.background
 
       ),
-      home: const LoginPage(),
+      routes: {
+        LoginPage.id: (context) => BlocProvider(
+          create: (context) => LoginBloc(authService: AuthService()),
+          child: const LoginPage(),
+        ),
+        SignUpPage.id: (context) => BlocProvider(
+          create: (context) => SignUpBloc(authService: AuthService()),
+          child: const SignUpPage(),
+        ),
+        ForgotPasswordPage.id: (context) =>  BlocProvider(
+          create: (context) => ForgotPasswordBloc(authService: AuthService()),
+          child: const ForgotPasswordPage(),
+        ),
+        MainPage.id: (context) => const MainPage(),
+      },
+      home: BlocProvider(
+        create: (context) => LoginBloc(authService: AuthService()),
+        child: const LoginPage(),
+      ),
     );
   }
 }

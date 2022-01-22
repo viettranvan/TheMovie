@@ -4,6 +4,8 @@ import 'package:the_movie/values/values.dart';
 import 'package:the_movie/widgets/widgets.dart';
 
 class MainPage extends StatefulWidget {
+  static const String id = 'main_page';
+
   const MainPage({Key? key}) : super(key: key);
 
   @override
