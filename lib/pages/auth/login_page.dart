@@ -102,6 +102,7 @@ class LoginPage extends StatelessWidget {
                                 barrierDismissible: false,
                                 builder: (context) => CustomDialog(
                                     title: 'Verify Email',
+                                    hasTwoButton: false,
                                     content:
                                         'Your account is not verified yet. Verify now!',
                                     onSubmit: () => gotoVerifyPage()));

@@ -61,6 +61,7 @@ class _ProfilePageState extends State<ProfilePage> {
             title: 'Log out',
             content: 'Do you want to log out?',
             onSubmit: () async{
+              showDialog(context: context, builder: (context) => const LoadingDialog());
               switch(loginType){
                 case 0:
                   await AuthService().signOut();
@@ -74,6 +75,7 @@ class _ProfilePageState extends State<ProfilePage> {
               await HelperSharedPreferences.saveLoginType(-1);
               await HelperSharedPreferences.saveExpirationTime(-1);
               await HelperSharedPreferences.saveLogin(false);
+              Navigator.pop(context);
               Navigator.pushNamedAndRemoveUntil(
                   context, LoginPage.id, (route) => false);
             },

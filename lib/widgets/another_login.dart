@@ -8,8 +8,7 @@ import 'package:the_movie/widgets/widgets.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AnotherLoginMethod extends StatelessWidget {
-  const AnotherLoginMethod(
-      {Key? key, required this.onFacebookLogin})
+  const AnotherLoginMethod({Key? key, required this.onFacebookLogin})
       : super(key: key);
 
   final Function()? onFacebookLogin;
@@ -42,22 +41,28 @@ class AnotherLoginMethod extends StatelessWidget {
           ],
         ),
         GestureDetector(
-          onTap: () async{
+          onTap: () async {
             final auth = FirebaseAuth.instance;
 
-            try{
+            try {
+
               await AuthService().signInWithGoogle(context: context);
-              var idTokenResult = await auth.currentUser!.getIdTokenResult();
-              String uid = auth.currentUser!.uid;
-              String token = idTokenResult.token ?? '';
-              int expirationTime = idTokenResult.expirationTime!.millisecondsSinceEpoch;
-              await HelperSharedPreferences.saveUid(uid);
-              await HelperSharedPreferences.saveToken(token);
-              await HelperSharedPreferences.saveLoginType(1);
-              await HelperSharedPreferences.saveExpirationTime(expirationTime);
-              await HelperSharedPreferences.saveLogin(true);
-              gotoMainPage();
-            }catch(e){
+              if (auth.currentUser != null) {
+                var idTokenResult = await auth.currentUser!.getIdTokenResult();
+                String uid = auth.currentUser!.uid;
+                String token = idTokenResult.token ?? '';
+                int expirationTime =
+                    idTokenResult.expirationTime!.millisecondsSinceEpoch;
+                await HelperSharedPreferences.saveUid(uid);
+                await HelperSharedPreferences.saveToken(token);
+                await HelperSharedPreferences.saveLoginType(1);
+                await HelperSharedPreferences.saveExpirationTime(
+                    expirationTime);
+                await HelperSharedPreferences.saveLogin(true);
+                Navigator.pop(context); // close loading dialog
+                gotoMainPage();
+              }
+            } catch (e) {
               debugPrint(e.toString());
             }
           },

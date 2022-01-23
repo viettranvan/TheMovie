@@ -19,14 +19,14 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final _emailController = TextEditingController();
 
   void onSendEmail() async{
-    // showDialog(
-    //   context: context,
-    //   barrierDismissible: false,
-    //   builder: (context) => const LoadingDialog(),
-    // );
-    //
-    // BlocProvider.of<ForgotPasswordBloc>(context)
-    //     .add(SendEmailRequest(email: _emailController.text));
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const LoadingDialog(),
+    );
+
+    BlocProvider.of<ForgotPasswordBloc>(context)
+        .add(SendEmailRequest(email: _emailController.text));
 
   }
 
