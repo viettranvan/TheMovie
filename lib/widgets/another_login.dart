@@ -1,17 +1,32 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:the_movie/pages/pages.dart';
+import 'package:the_movie/services/auth.dart';
+import 'package:the_movie/services/services.dart';
 import 'package:the_movie/values/values.dart';
 import 'package:the_movie/widgets/widgets.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AnotherLoginMethod extends StatelessWidget {
   const AnotherLoginMethod(
-      {Key? key, required this.onGoggleLogin, required this.onFacebookLogin})
+      {Key? key, required this.onFacebookLogin})
       : super(key: key);
 
-  final Function()? onGoggleLogin;
   final Function()? onFacebookLogin;
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+    final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ["email"]);
+
+    void gotoMainPage() {
+      Navigator.pushReplacementNamed(context, MainPage.id);
+      // WidgetsBinding.instance!.addPostFrameCallback((_) {
+      //   Navigator.pushReplacementNamed(context, MainPage.id);
+      // });
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -27,7 +42,25 @@ class AnotherLoginMethod extends StatelessWidget {
           ],
         ),
         GestureDetector(
-          onTap: onGoggleLogin,
+          onTap: () async{
+            final auth = FirebaseAuth.instance;
+
+            try{
+              await AuthService().signInWithGoogle(context: context);
+              var idTokenResult = await auth.currentUser!.getIdTokenResult();
+              String uid = auth.currentUser!.uid;
+              String token = idTokenResult.token ?? '';
+              int expirationTime = idTokenResult.expirationTime!.millisecondsSinceEpoch;
+              await HelperSharedPreferences.saveUid(uid);
+              await HelperSharedPreferences.saveToken(token);
+              await HelperSharedPreferences.saveLoginType(1);
+              await HelperSharedPreferences.saveExpirationTime(expirationTime);
+              await HelperSharedPreferences.saveLogin(true);
+              gotoMainPage();
+            }catch(e){
+              debugPrint(e.toString());
+            }
+          },
           child: Container(
             height: 50,
             width: double.infinity,

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:the_movie/blocs/blocs.dart';
 import 'package:the_movie/pages/auth/login_page.dart';
-import 'package:the_movie/validation/validation.dart';
 import 'package:the_movie/values/values.dart';
 import 'package:the_movie/widgets/widgets.dart';
 
@@ -28,13 +27,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     //
     // BlocProvider.of<ForgotPasswordBloc>(context)
     //     .add(SendEmailRequest(email: _emailController.text));
-    print('send');
 
-    FirebaseAuth _auth = FirebaseAuth.instance;
-    await _auth.signInWithEmailAndPassword(email: 'viettranvan2k@gmail.com', password: '123456');
-
-
-    await _auth.currentUser!.sendEmailVerification();
   }
 
   @override

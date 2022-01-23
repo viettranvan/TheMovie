@@ -1,7 +1,7 @@
 class Authentication {
-  final String? uid;
-  final String? token;
-  final DateTime? expiredToken;
+  final String uid;
+  final String token;
+  final int expiredToken;
 
   Authentication({
     required this.uid,

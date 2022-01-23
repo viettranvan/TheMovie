@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:the_movie/blocs/blocs.dart';
+import 'package:the_movie/models/authentication.dart';
 import 'package:the_movie/pages/pages.dart';
+import 'package:the_movie/services/services.dart';
 import 'package:the_movie/values/values.dart';
 import 'package:the_movie/widgets/widgets.dart';
 
@@ -37,7 +39,13 @@ class LoginPage extends StatelessWidget {
       Navigator.of(context).pushNamed(ForgotPasswordPage.id);
     }
 
-    void gotoMainPage() {
+    void gotoMainPage(Authentication auth) async{
+      await HelperSharedPreferences.saveUid(auth.uid);
+      await HelperSharedPreferences.saveToken(auth.token);
+      await HelperSharedPreferences.saveLoginType(0);
+      await HelperSharedPreferences.saveExpirationTime(auth.expiredToken);
+      await HelperSharedPreferences.saveLogin(true);
+
       WidgetsBinding.instance!.addPostFrameCallback((_) {
         Navigator.pushReplacementNamed(context, MainPage.id);
       });
@@ -102,7 +110,8 @@ class LoginPage extends StatelessWidget {
 
                         case LoginSuccess:
                           Navigator.maybePop(context);
-                          // gotoMainPage();
+                          Authentication auth = (state as LoginSuccess).authentication;
+                          gotoMainPage(auth);
                           break;
                         default:
                           return const SizedBox();
@@ -149,7 +158,6 @@ class LoginPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 20.0),
                   AnotherLoginMethod(
-                    onGoggleLogin: () {},
                     onFacebookLogin: () {},
                   ),
                   const SizedBox(height: 20.0),

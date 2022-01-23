@@ -1,9 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:the_movie/pages/pages.dart';
-import 'package:the_movie/pages/home/now_playing_view.dart';
-import 'package:the_movie/pages/home/popular_view.dart';
-import 'package:the_movie/pages/home/top_rated_view.dart';
 import 'package:the_movie/values/values.dart';
 import 'package:the_movie/widgets/widgets.dart';
 
@@ -12,6 +10,12 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    GoogleSignIn _googleSignIn = GoogleSignIn(
+      scopes: <String>[
+        'email',
+        // 'https://www.googleapis.com/auth/contacts.readonly',
+      ],
+    );
     String username = 'Guest';
 
     return Scaffold(
@@ -31,8 +35,18 @@ class HomePage extends StatelessWidget {
                   FirebaseAuth _auth =  FirebaseAuth.instance;
                   var user = _auth.currentUser;
                   var verifyEmail = user?.emailVerified;
-                  print('user:  ${user?.email}');
+                  print('user:  ${user?.uid}');
+                  print('name:  ${user?.displayName}');
+                  print('name:  ${user?.photoURL}');
+                  user?.updatePhotoURL(
+                    'https://i.pinimg.com/236x/17/3d/6c/173d6c5ea458b677afa5a34a35d6eb55.jpg'
+                  );
                   print('verifyEmail:  $verifyEmail');
+
+                  _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount? account) {
+                    print('account: $account');
+                  });
+
                 },
                 child: Text('Click $username,', style: kTextSize20w400White),
               ),

@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:the_movie/models/models.dart';
-import 'package:the_movie/services/auth.dart';
+import 'package:the_movie/services/services.dart';
 import 'package:the_movie/validation/validation.dart';
 import 'package:the_movie/values/values.dart';
 

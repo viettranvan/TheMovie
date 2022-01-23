@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:the_movie/pages/pages.dart';
+import 'package:the_movie/services/auth.dart';
+import 'package:the_movie/services/services.dart';
 import 'package:the_movie/values/values.dart';
 import 'package:the_movie/widgets/widgets.dart';
 
@@ -33,14 +36,60 @@ class _ProfilePageState extends State<ProfilePage> {
     _emailController.dispose();
   }
 
+
+
   @override
   Widget build(BuildContext context) {
+    int loginType = 0;
+    HelperSharedPreferences.getLoginType().then((value){
+      loginType = value ?? 0;
+    });
+
+    GoogleSignIn _googleSignIn = GoogleSignIn(
+      // Optional clientId
+      // clientId: '479882132969-9i9aqik3jfjd7qhci1nqf0bm2g71rm1u.apps.googleusercontent.com',
+      scopes: <String>[
+        'email',
+      ],
+    );
+
+    void onLogOut() async {
+      try {
+        showDialog(
+          context: context,
+          builder: (context) => CustomDialog(
+            title: 'Log out',
+            content: 'Do you want to log out?',
+            onSubmit: () async{
+              switch(loginType){
+                case 0:
+                  await AuthService().signOut();
+                  break;
+                case 1:
+                  await _googleSignIn.disconnect();
+                  break;
+              }
+              await HelperSharedPreferences.saveUid('');
+              await HelperSharedPreferences.saveToken('');
+              await HelperSharedPreferences.saveLoginType(-1);
+              await HelperSharedPreferences.saveExpirationTime(-1);
+              await HelperSharedPreferences.saveLogin(false);
+              Navigator.pushNamedAndRemoveUntil(
+                  context, LoginPage.id, (route) => false);
+            },
+          ),
+        );
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Your Profile', style: kTextSize28w500White),
         actions: [
           GestureDetector(
-            onTap: () => print('log out'),
+            onTap: () => onLogOut(),
             child: const Padding(
               padding: EdgeInsets.only(right: 10.0),
               child: Icon(Icons.logout, size: 30.0, color: AppColor.white),
@@ -101,14 +150,12 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 const SizedBox(height: 10.0),
                 ReusableButton(
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const ChangePasswordPage())
-                  ),
+                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const ChangePasswordPage())),
                   buttonTitle: 'Change Password',
                   buttonColor: AppColor.green,
                 ),
                 const SizedBox(height: 20.0),
-
               ],
             ),
           ),

@@ -2,7 +2,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:the_movie/blocs/blocs.dart';
-import 'package:the_movie/pages/auth/sign_up_page.dart';
 import 'package:the_movie/pages/pages.dart';
 import 'package:the_movie/values/values.dart';
 
@@ -50,7 +49,7 @@ class TheMovieApp extends StatelessWidget {
       // const VerifyEmail()
       BlocProvider(
         create: (context) => LoginBloc(authService: AuthService()),
-        child: const LoginPage(),
+        child: const SplashScreen(),
       ),
     );
   }

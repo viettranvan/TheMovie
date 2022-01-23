@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:the_movie/blocs/blocs.dart';
-import 'package:the_movie/pages/auth/login_page.dart';
+import 'package:the_movie/models/authentication.dart';
 import 'package:the_movie/pages/pages.dart';
 import 'package:the_movie/values/values.dart';
 import 'package:the_movie/widgets/widgets.dart';
@@ -37,9 +37,11 @@ class _SignUpPageState extends State<SignUpPage> {
           confirm: _confirmController.text),
     );
   }
-  void gotoVerifyPage() {
+  void gotoVerifyPage(Authentication auth) {
     WidgetsBinding.instance!.addPostFrameCallback((_){
-      Navigator.pushNamedAndRemoveUntil(context,VerifyEmail.id,(Route<dynamic> route) => false);
+      Navigator.pushNamedAndRemoveUntil(context,VerifyEmail.id,(Route<dynamic> route) => false,arguments: {
+        auth: auth
+      });
     });
   }
 
@@ -87,7 +89,8 @@ class _SignUpPageState extends State<SignUpPage> {
                             message: (state as SignUpFailure).errorMessage);
                       case SignUpSuccess:
                         Navigator.maybePop(context);
-                        gotoVerifyPage();
+                        Authentication auth = (state as SignUpSuccess).authentication;
+                        gotoVerifyPage(auth);
                         break;
                       default:
                         return const SizedBox();
@@ -135,7 +138,6 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
                 const SizedBox(height: 20.0),
                 AnotherLoginMethod(
-                  onGoggleLogin: () => print('Login google'),
                   onFacebookLogin: () {},
                 ),
                 const SizedBox(height: 20.0),

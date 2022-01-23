@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +7,8 @@ import 'package:the_movie/values/values.dart';
 import 'package:the_movie/widgets/custom_dialog.dart';
 import 'package:open_mail_app/open_mail_app.dart';
 import 'package:the_movie/widgets/loading_dialog.dart';
+
+import '../../services/services.dart';
 
 class VerifyEmail extends StatefulWidget {
   static const String id = 'verify_email';
@@ -43,6 +44,26 @@ class _VerifyEmailState extends State<VerifyEmail> {
     timer.cancel();
   }
 
+  void gotoMainPage()async{
+    FirebaseAuth auth = FirebaseAuth.instance;
+    var idTokenResult = await auth.currentUser!.getIdTokenResult();
+    String uid = auth.currentUser!.uid;
+    String token = idTokenResult.token ?? '';
+    int expirationTime = idTokenResult.expirationTime!.millisecondsSinceEpoch;
+
+    await HelperSharedPreferences.saveUid(uid);
+    await HelperSharedPreferences.saveToken(token);
+    await HelperSharedPreferences.saveLoginType(0);
+    await HelperSharedPreferences.saveExpirationTime(expirationTime);
+    await HelperSharedPreferences.saveLogin(true);
+
+    // WidgetsBinding.instance!.addPostFrameCallback((_) {
+    //   Navigator.pushReplacementNamed(context, MainPage.id);
+    // });
+
+    Navigator.of(context).pushReplacementNamed(MainPage.id);
+  }
+
   Future<void> checkEmailVerified() async{
     user = _auth.currentUser!;
     await user.reload();
@@ -52,7 +73,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
       showDialog(context: context, builder: (context) => const LoadingDialog());
       Future.delayed(const Duration(seconds: 2)).then((_){
         Navigator.of(context).pop();
-        Navigator.of(context).pushReplacementNamed(LoginPage.id);
+        gotoMainPage();
       });
     }
   }
@@ -92,12 +113,6 @@ class _VerifyEmailState extends State<VerifyEmail> {
     } catch (e) {
       debugPrint('Could not launch Mail App');
     }
-    // const url = 'mailto: sejpalbhargav67@gmail.com';
-    // if (await canLaunch(url))
-    // await launch(url);
-    // else
-    // // can't launch url, there is some error
-    // throw "Could not launch $url";
   }
 
   @override

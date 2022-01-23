@@ -32,3 +32,4 @@ export 'auth/sign_up_page.dart';
 export 'auth/verify_email.dart';
 
 export 'main_page.dart';
+export 'splash_screen.dart';
