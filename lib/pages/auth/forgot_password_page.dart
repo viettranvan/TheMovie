@@ -19,15 +19,22 @@ class ForgotPasswordPage extends StatefulWidget {
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final _emailController = TextEditingController();
 
-  void onSendEmail() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => const LoadingDialog(),
-    );
+  void onSendEmail() async{
+    // showDialog(
+    //   context: context,
+    //   barrierDismissible: false,
+    //   builder: (context) => const LoadingDialog(),
+    // );
+    //
+    // BlocProvider.of<ForgotPasswordBloc>(context)
+    //     .add(SendEmailRequest(email: _emailController.text));
+    print('send');
 
-    BlocProvider.of<ForgotPasswordBloc>(context)
-        .add(SendEmailRequest(email: _emailController.text));
+    FirebaseAuth _auth = FirebaseAuth.instance;
+    await _auth.signInWithEmailAndPassword(email: 'viettranvan2k@gmail.com', password: '123456');
+
+
+    await _auth.currentUser!.sendEmailVerification();
   }
 
   @override

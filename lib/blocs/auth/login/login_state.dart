@@ -9,6 +9,8 @@ class LoginSuccess extends LoginState{
   LoginSuccess({required this.authentication});
 }
 
+class EmailIsNotVerify extends LoginState{}
+
 class LoginFailure extends LoginState{
   final String errorMessage;
   LoginFailure({required this.errorMessage});

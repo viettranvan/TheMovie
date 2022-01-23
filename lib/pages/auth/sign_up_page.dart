@@ -37,9 +37,9 @@ class _SignUpPageState extends State<SignUpPage> {
           confirm: _confirmController.text),
     );
   }
-  void gotoMainPage() {
+  void gotoVerifyPage() {
     WidgetsBinding.instance!.addPostFrameCallback((_){
-      Navigator.pushReplacementNamed(context, MainPage.id);
+      Navigator.pushNamedAndRemoveUntil(context,VerifyEmail.id,(Route<dynamic> route) => false);
     });
   }
 
@@ -87,7 +87,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             message: (state as SignUpFailure).errorMessage);
                       case SignUpSuccess:
                         Navigator.maybePop(context);
-                        gotoMainPage();
+                        gotoVerifyPage();
                         break;
                       default:
                         return const SizedBox();

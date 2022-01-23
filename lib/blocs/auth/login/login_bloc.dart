@@ -24,10 +24,18 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           emit(LoginFailure(errorMessage: check));
         emit(LoginFailure(errorMessage: check));
       } else {
+        FirebaseAuth _auth = FirebaseAuth.instance;
         var authenticationObj = await authService.signInWithEmailAndPassword(
             event.email, event.password);
+        bool emailVerified = _auth.currentUser?.emailVerified ?? false;
+
         if (authenticationObj.runtimeType == Authentication) {
-          emit(LoginSuccess(authentication: authenticationObj));
+          if(emailVerified){
+            emit(LoginSuccess(authentication: authenticationObj));
+          }else{
+            emit(EmailIsNotVerify());
+            // emit(LoginFailure(errorMessage: 'Your account is not verified yet please check your email!'));
+          }
         } else if (authenticationObj.runtimeType == FirebaseAuthException) {
           emit(LoginFailure(
               errorMessage:

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:the_movie/pages/pages.dart';
 import 'package:the_movie/pages/home/now_playing_view.dart';
@@ -24,6 +25,16 @@ class HomePage extends StatelessWidget {
                 padding:
                     const EdgeInsets.only(left: 20.0, top: 30.0, bottom: 30.0),
                 child: Text('Hello $username,', style: kTextSize30w400White),
+              ),
+              GestureDetector(
+                onTap: (){
+                  FirebaseAuth _auth =  FirebaseAuth.instance;
+                  var user = _auth.currentUser;
+                  var verifyEmail = user?.emailVerified;
+                  print('user:  ${user?.email}');
+                  print('verifyEmail:  $verifyEmail');
+                },
+                child: Text('Click $username,', style: kTextSize20w400White),
               ),
               OfficialTrailerCard(
                 image: image,

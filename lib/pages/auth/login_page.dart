@@ -12,7 +12,6 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final _emailController = TextEditingController();
     final _passwordController = TextEditingController();
 
@@ -37,9 +36,16 @@ class LoginPage extends StatelessWidget {
     void gotoForgotPassword() {
       Navigator.of(context).pushNamed(ForgotPasswordPage.id);
     }
+
     void gotoMainPage() {
-      WidgetsBinding.instance!.addPostFrameCallback((_){
+      WidgetsBinding.instance!.addPostFrameCallback((_) {
         Navigator.pushReplacementNamed(context, MainPage.id);
+      });
+    }
+
+    void gotoVerifyPage() {
+      WidgetsBinding.instance!.addPostFrameCallback((_){
+        Navigator.pushNamedAndRemoveUntil(context,VerifyEmail.id,(Route<dynamic> route) => false);
       });
     }
 
@@ -81,9 +87,22 @@ class LoginPage extends StatelessWidget {
                           Navigator.maybePop(context);
                           return ErrorMessageBox(
                               message: (state as LoginFailure).errorMessage);
+                        case EmailIsNotVerify:
+                          Future.delayed(Duration.zero).then((_) {
+                            showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (context) => CustomDialog(
+                                    title: 'Verify Email',
+                                    content:
+                                        'Your account is not verified yet. Verify now!',
+                                    onSubmit: () => gotoVerifyPage()));
+                          });
+                          return const SizedBox();
+
                         case LoginSuccess:
                           Navigator.maybePop(context);
-                          gotoMainPage();
+                          // gotoMainPage();
                           break;
                         default:
                           return const SizedBox();

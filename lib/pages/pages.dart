@@ -29,5 +29,6 @@ export 'discover/tv_series_view.dart';
 export 'auth/login_page.dart';
 export 'auth/forgot_password_page.dart';
 export 'auth/sign_up_page.dart';
+export 'auth/verify_email.dart';
 
 export 'main_page.dart';

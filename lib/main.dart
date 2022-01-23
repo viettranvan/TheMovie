@@ -43,9 +43,12 @@ class TheMovieApp extends StatelessWidget {
           create: (context) => ForgotPasswordBloc(authService: AuthService()),
           child: const ForgotPasswordPage(),
         ),
+        VerifyEmail.id: (context) => const VerifyEmail(),
         MainPage.id: (context) => const MainPage(),
       },
-      home: BlocProvider(
+      home:
+      // const VerifyEmail()
+      BlocProvider(
         create: (context) => LoginBloc(authService: AuthService()),
         child: const LoginPage(),
       ),
