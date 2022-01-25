@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_login_facebook/flutter_login_facebook.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:the_movie/blocs/blocs.dart';
 import 'package:the_movie/pages/pages.dart';
-import 'package:the_movie/services/auth.dart';
 import 'package:the_movie/services/services.dart';
 import 'package:the_movie/values/values.dart';
 import 'package:the_movie/widgets/widgets.dart';
@@ -15,19 +17,19 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  final String ava =
-      'https://www.meme-arsenal.com/memes/e21e0322937679d2d732dc295b95a282.jpg';
-
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  final _auth = FirebaseAuth.instance;
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _nameController.text = 'Viet Tran';
-    _emailController.text = 'viettranvan2k@gmil.com';
-  }
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: <String>[
+      'email',
+    ],
+  );
+
+  final _facebookLogin = FacebookLogin(debug: true);
+
+  int loginType = -1;
 
   @override
   void dispose() {
@@ -37,26 +39,21 @@ class _ProfilePageState extends State<ProfilePage> {
     _emailController.dispose();
   }
 
-
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _nameController.text = _auth.currentUser?.displayName ?? "";
+    _emailController.text = _auth.currentUser?.email ?? "";
+    HelperSharedPreferences.getLoginType().then((value) {
+      setState(() {
+        loginType = value ?? 0;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    int loginType = 0;
-    HelperSharedPreferences.getLoginType().then((value){
-      loginType = value ?? 0;
-    });
-
-    GoogleSignIn _googleSignIn = GoogleSignIn(
-      // Optional clientId
-      // clientId: '479882132969-9i9aqik3jfjd7qhci1nqf0bm2g71rm1u.apps.googleusercontent.com',
-      scopes: <String>[
-        'email',
-      ],
-    );
-
-    final _facebookLogin = FacebookLogin(debug: true);
-
-
     void onLogOut() async {
       try {
         showDialog(
@@ -64,9 +61,12 @@ class _ProfilePageState extends State<ProfilePage> {
           builder: (context) => CustomDialog(
             title: 'Log out',
             content: 'Do you want to log out?',
-            onSubmit: () async{
-              showDialog(context: context, builder: (context) => const LoadingDialog());
-              switch(loginType){
+            onSubmit: () async {
+              showDialog(
+                  context: context,
+                  builder: (context) => const LoadingDialog());
+
+              switch (loginType) {
                 case 0:
                   await AuthService().signOut();
                   break;
@@ -78,6 +78,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   await _facebookLogin.logOut();
                   break;
               }
+
               await AuthService().signOut();
               await HelperSharedPreferences.saveUid('');
               await HelperSharedPreferences.saveToken('');
@@ -93,6 +94,18 @@ class _ProfilePageState extends State<ProfilePage> {
       } catch (e) {
         debugPrint(e.toString());
       }
+    }
+
+    void onSaveProfile() {
+      showDialog(context: context, builder: (context) => const LoadingDialog());
+      if (_auth.currentUser != null) {
+        BlocProvider.of<ProfileBloc>(context).add(SaveProfileEvent(
+            user: _auth.currentUser!, name: _nameController.text));
+      }
+    }
+
+    void gotoChangePassword() {
+      Navigator.of(context).pushNamed(ChangePasswordPage.id);
     }
 
     return Scaffold(
@@ -119,16 +132,55 @@ class _ProfilePageState extends State<ProfilePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 20.0),
+
+                BlocBuilder<ProfileBloc,ProfileState>(
+                  builder: (context,state){
+                    switch(state.runtimeType){
+                      case SaveProfileSuccess:
+                        // close loading dialog
+                        Navigator.of(context).pop();
+                        Future.delayed(Duration.zero).then((_){
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                            content: Text('Update profile successfully!', style: kTextSize18w400White),
+                            backgroundColor: AppColor.background,
+                          ));
+
+                        });
+                        return const SizedBox();
+                      case SaveProfileFailure:
+                      // close loading dialog
+                        Navigator.of(context).pop();
+                        Future.delayed(Duration.zero).then((_){
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                            content: Text('Update profile failure!', style: kTextSize18w400White),
+                            backgroundColor: AppColor.background,
+                          ));
+                        });
+                        return const SizedBox();
+                    }
+                    return const SizedBox();
+                  },
+                ),
                 Center(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(150.0),
-                    child: FadeInImage(
-                      placeholder: const AssetImage(
-                          'assets/images/image_placeholder.gif'),
-                      image: NetworkImage(ava),
-                      fit: BoxFit.cover,
-                      height: 150.0,
-                      width: 150.0,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 0.5, color: AppColor.blur),
+                      borderRadius: BorderRadius.circular(150.0),
+                      shape: BoxShape.rectangle,
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(150.0),
+                      child: FadeInImage(
+                        placeholder: const AssetImage(
+                          'assets/images/image_placeholder.gif',
+                        ),
+                        image: NetworkImage(_auth.currentUser == null
+                            ? noProfileImage
+                            : _auth.currentUser?.photoURL ?? noProfileImage),
+                        fit: BoxFit.cover,
+                        height: 150.0,
+                        width: 150.0,
+                      ),
                     ),
                   ),
                 ),
@@ -155,18 +207,18 @@ class _ProfilePageState extends State<ProfilePage> {
                 ReusableTextField(controller: _emailController, enabled: false),
                 const SizedBox(height: 20.0),
                 ReusableButton(
-                  onTap: () {},
+                  onTap: () => onSaveProfile(),
                   buttonTitle: 'Save',
-                  buttonColor: AppColor.yellow,
+                  buttonColor: AppColor.red,
                 ),
                 const SizedBox(height: 10.0),
-                ReusableButton(
-                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const ChangePasswordPage())),
-                  buttonTitle: 'Change Password',
-                  buttonColor: AppColor.green,
-                ),
-                const SizedBox(height: 20.0),
+                loginType == 0
+                    ? ReusableButton(
+                        onTap: () => gotoChangePassword(),
+                        buttonTitle: 'Change Password',
+                        buttonColor: AppColor.green,
+                      )
+                    : const SizedBox(),
               ],
             ),
           ),

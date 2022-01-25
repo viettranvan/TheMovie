@@ -1,12 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:the_movie/values/app_styles.dart';
 import 'package:the_movie/values/values.dart';
 
 const String image =
     'https://image.tmdb.org/t/p/w500/jOuCWdh0BE6XPu2Vpjl08wDAeFz.jpg';
 const String image2 =
     'https://image.tmdb.org/t/p/w500/qtX2Fg9MTmrbgN1UUvGoCsImTM8.jpg';
+
+const String noPosterImage = 'https://www.prokerala.com/movies/assets/img/no-poster-available.jpg';
+const String noProfileImage =  "https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png";
+
+const String baseUrlImage = "https://image.tmdb.org/t/p/w500";
+const String youtubeUrl =  "https://www.youtube.com/embed/";
 
 const ImageProvider placeholderImage =
     AssetImage('assets/images/placeholder.gif');

@@ -14,3 +14,8 @@ export 'auth/sign_up/sign_up_event.dart';
 export 'auth/sign_up/sign_up_state.dart';
 
 /// home bloc
+
+/// Profile Bloc
+export 'profile/profile_bloc.dart';
+export 'profile/profile_state.dart';
+export 'profile/profile_event.dart';

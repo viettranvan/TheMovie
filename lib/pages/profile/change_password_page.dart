@@ -1,23 +1,58 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:the_movie/blocs/blocs.dart';
 import 'package:the_movie/values/values.dart';
 import 'package:the_movie/widgets/widgets.dart';
 
 class ChangePasswordPage extends StatelessWidget {
+  static const String id = 'change_password';
+
   const ChangePasswordPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
     final TextEditingController _currentController = TextEditingController();
     final TextEditingController _newController = TextEditingController();
     final TextEditingController _confirmController = TextEditingController();
 
-    final dialog = CustomDialog(
-      title: 'Confirm Change Password',
-      content: 'Are you want to change your password?',
-      onSubmit: () {},
-      hasTwoButton: false,
-    );
+    final auth = FirebaseAuth.instance;
+
+    void onConfirmChange() {
+      showDialog(context: context, builder: (context) => const LoadingDialog());
+      BlocProvider.of<ProfileBloc>(context).add(CheckErrorEvent(
+        user: auth.currentUser,
+        currentPassword: _currentController.text,
+        newPassword: _newController.text,
+        confirmPassword: _confirmController.text,
+      ));
+    }
+
+    onChangePasswordSuccess(BuildContext context) {
+      print('success');
+      // back to profile page
+      Navigator.of(context).pop();
+
+      WidgetsBinding.instance!.addPostFrameCallback((_){
+
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Your password has been change!', style: kTextSize18w400White),
+          backgroundColor: AppColor.background,
+        ));
+        // Add Your Code here.
+        Navigator.of(context).pop();
+
+      });
+
+
+    }
+
+    var changePasswordDialog = CustomDialog(
+        title: 'Confirm Change Password',
+        content: 'Are you want to change your password?',
+        onSubmit: () => BlocProvider.of<ProfileBloc>(context).add(
+            ChangePasswordEvent(
+                user: auth.currentUser, newPassword: _newController.text)));
 
     return Scaffold(
       appBar: AppBar(
@@ -33,16 +68,43 @@ class ChangePasswordPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 50.0),
-                const ErrorMessageBox(message: 'message'),
+                BlocBuilder<ProfileBloc, ProfileState>(
+                  builder: (context, state) {
+                    switch (state.runtimeType) {
+                      case ChangePasswordFailure:
+                        Navigator.maybePop(context);
+                        return ErrorMessageBox(
+                            message:
+                                (state as ChangePasswordFailure).errorMessage);
+                      case ErrorIsClear:
+                        Navigator.maybePop(context);
+                        Future.delayed(Duration.zero).then((_) {
+                          showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (context) => changePasswordDialog);
+                        });
+
+                        return const SizedBox();
+                      case ChangePasswordSuccess:
+                        onChangePasswordSuccess(context);
+
+                        break;
+                      default:
+                        return const SizedBox();
+                    }
+                    return const SizedBox();
+                  },
+                ),
                 const SizedBox(height: 20.0),
                 const Text('Current Password', style: kTextSize20w400White),
                 const SizedBox(height: 10.0),
                 ReusableTextField(
-                    controller: _currentController,
-                    hintText: 'Enter your current Password',
-                    obscureText: true,
-                    textInputAction: TextInputAction.next,
-                    suffixIcon: true,
+                  controller: _currentController,
+                  hintText: 'Enter your current Password',
+                  obscureText: true,
+                  textInputAction: TextInputAction.next,
+                  suffixIcon: true,
                 ),
                 const SizedBox(height: 20.0),
                 const Text('New Password', style: kTextSize20w400White),
@@ -64,8 +126,7 @@ class ChangePasswordPage extends StatelessWidget {
                     suffixIcon: true),
                 const SizedBox(height: 20.0),
                 ReusableButton(
-                  onTap: () => showDialog(
-                      context: context, builder: (context) => dialog),
+                  onTap: () => onConfirmChange(),
                   buttonTitle: 'Confirm',
                   buttonColor: AppColor.red,
                 ),

@@ -43,6 +43,10 @@ class TheMovieApp extends StatelessWidget {
           child: const ForgotPasswordPage(),
         ),
         VerifyEmail.id: (context) => const VerifyEmail(),
+        ChangePasswordPage.id: (context) =>  BlocProvider(
+          create: (context) => ProfileBloc(),
+          child: const ChangePasswordPage(),
+        ),
         MainPage.id: (context) => const MainPage(),
       },
       home:
