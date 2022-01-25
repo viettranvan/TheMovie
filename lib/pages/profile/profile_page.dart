@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_login_facebook/flutter_login_facebook.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -8,6 +9,7 @@ import 'package:the_movie/pages/pages.dart';
 import 'package:the_movie/services/services.dart';
 import 'package:the_movie/values/values.dart';
 import 'package:the_movie/widgets/widgets.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -104,6 +106,21 @@ class _ProfilePageState extends State<ProfilePage> {
       }
     }
 
+    Future pickImage() async {
+      try {
+        var image = await ImagePicker().pickImage(source: ImageSource.gallery);
+        if (image == null) {
+          return;
+        }
+        if (_auth.currentUser != null) {
+          BlocProvider.of<AvatarBloc>(context).add(ChangeAvatarEvent(
+              imagePath: image.path, user: _auth.currentUser!));
+        }
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+    }
+
     void gotoChangePassword() {
       Navigator.of(context).pushNamed(ChangePasswordPage.id);
     }
@@ -132,27 +149,29 @@ class _ProfilePageState extends State<ProfilePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 20.0),
-
-                BlocBuilder<ProfileBloc,ProfileState>(
-                  builder: (context,state){
-                    switch(state.runtimeType){
+                BlocBuilder<ProfileBloc, ProfileState>(
+                  builder: (context, state) {
+                    switch (state.runtimeType) {
                       case SaveProfileSuccess:
                         // close loading dialog
                         Navigator.of(context).pop();
-                        Future.delayed(Duration.zero).then((_){
-                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                            content: Text('Update profile successfully!', style: kTextSize18w400White),
+                        Future.delayed(Duration.zero).then((_) {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text('Update profile successfully!',
+                                style: kTextSize18w400White),
                             backgroundColor: AppColor.background,
                           ));
-
                         });
                         return const SizedBox();
                       case SaveProfileFailure:
-                      // close loading dialog
+                        // close loading dialog
                         Navigator.of(context).pop();
-                        Future.delayed(Duration.zero).then((_){
-                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                            content: Text('Update profile failure!', style: kTextSize18w400White),
+                        Future.delayed(Duration.zero).then((_) {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text('Update profile failure!',
+                                style: kTextSize18w400White),
                             backgroundColor: AppColor.background,
                           ));
                         });
@@ -170,23 +189,40 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(150.0),
-                      child: FadeInImage(
-                        placeholder: const AssetImage(
-                          'assets/images/image_placeholder.gif',
-                        ),
-                        image: NetworkImage(_auth.currentUser == null
-                            ? noProfileImage
-                            : _auth.currentUser?.photoURL ?? noProfileImage),
-                        fit: BoxFit.cover,
-                        height: 150.0,
-                        width: 150.0,
+                      child: BlocBuilder<AvatarBloc, AvatarState>(
+                        builder: (context, state) {
+                          if (state is ChangeAvatarLoading) {
+                            return SizedBox(
+                                height: 150.0,
+                                width: 150.0,
+                                child: Image.asset(
+                                    'assets/images/image_placeholder.gif'));
+
+                          }else if(state is ChangeAvatarSuccess){
+                            debugPrint('success');
+                          }else if(state is ChangeAvatarFailure){
+                            debugPrint('fail');
+                          }
+                          return FadeInImage(
+                            placeholder: const AssetImage(
+                              'assets/images/image_placeholder.gif',
+                            ),
+                            image: NetworkImage(_auth.currentUser == null
+                                ? noProfileImage
+                                : _auth.currentUser?.photoURL ??
+                                    noProfileImage),
+                            fit: BoxFit.cover,
+                            height: 150.0,
+                            width: 150.0,
+                          );
+                        },
                       ),
                     ),
                   ),
                 ),
                 const SizedBox(height: 20.0),
                 GestureDetector(
-                  onTap: () => print('Edit Photo'),
+                  onTap: () => pickImage(),
                   child: const Center(
                     child: Text(
                       'Edit Photo',

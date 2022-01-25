@@ -49,8 +49,15 @@ class _MainPageState extends State<MainPage> {
           children: [
             const HomePage(),
             const DiscoverPage(),
-            BlocProvider(
-              create: (context) => ProfileBloc(),
+            MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (context) => ProfileBloc(),
+                ),
+                BlocProvider(
+                  create: (context) => AvatarBloc(),
+                ),
+              ],
               child: const ProfilePage(),
             ),
           ],

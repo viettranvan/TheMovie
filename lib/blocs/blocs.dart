@@ -19,3 +19,8 @@ export 'auth/sign_up/sign_up_state.dart';
 export 'profile/profile_bloc.dart';
 export 'profile/profile_state.dart';
 export 'profile/profile_event.dart';
+
+/// Profile Bloc->avatar
+export 'profile/avatar/avatar_bloc.dart';
+export 'profile/avatar/avatar_state.dart';
+export 'profile/avatar/avatar_event.dart';
