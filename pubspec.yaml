@@ -23,7 +23,7 @@ environment:
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
 # consider running `flutter pub upgrade --major-versions`. Alternatively,
-# dependencies can be manually updated by changing the version numbers below to
+# dependencies can be manually updated nging the version numbers below to
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
@@ -46,6 +46,8 @@ dependencies:
   google_sign_in: ^5.2.3
   flutter_keychain: ^2.1.0
   shared_preferences: ^2.0.12
+  flutter_login_facebook: ^1.2.0
+
 
 dev_dependencies:
   flutter_test:

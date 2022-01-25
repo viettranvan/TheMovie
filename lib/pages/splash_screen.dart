@@ -3,15 +3,56 @@ import 'package:the_movie/pages/pages.dart';
 import 'package:the_movie/services/services.dart';
 import 'package:the_movie/values/values.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    bool isLogin = false;
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  bool isLogin = false;
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
     HelperSharedPreferences.getLogin().then((value) {
       isLogin = value ?? false;
     });
+
+
+    super.initState();
+
+  }
+  @override
+  void didChangeDependencies() {
+    checkLogin();
+    super.didChangeDependencies();
+  }
+
+  void checkLogin() {
+    HelperSharedPreferences.getExpirationTime().then((value) {
+      int timeNow = DateTime.now().millisecondsSinceEpoch;
+      Future.delayed(const Duration(seconds: 3)).then((_) {
+        if (value != null &&
+            value >= timeNow &&
+            isLogin &&
+            value != -1) {
+          Navigator.pushNamedAndRemoveUntil(context, MainPage.id,(Route<dynamic> route) => false);
+
+        } else {
+          Navigator.pushNamedAndRemoveUntil(context, LoginPage.id,(Route<dynamic> route) => false);
+        }
+      });
+    });
+  }
+
+
+
+  @override
+  Widget build(BuildContext context) {
+
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -34,9 +75,13 @@ class SplashScreen extends StatelessWidget {
           ),
           const SizedBox(height: 10.0),
           Center(
-              child: Text('Welcome to the Movie App',
-                  style: kTextSize30w400White.copyWith(
-                      fontWeight: FontWeight.bold))),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Text('Welcome to The Movie App',
+                    textAlign: TextAlign.center,
+                    style: kTextSize30w400White.copyWith(
+                        fontWeight: FontWeight.bold,)),
+              )),
           const SizedBox(height: 20.0),
           SizedBox(
             height: 50.0,
@@ -46,22 +91,23 @@ class SplashScreen extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
-          FutureBuilder(
-            future: HelperSharedPreferences.getExpirationTime().then((value) {
-              int timeNow = DateTime.now().millisecondsSinceEpoch;
-              Future.delayed(const Duration(seconds: 3)).then((_) {
-                if (value != null &&
-                    value >= timeNow &&
-                    isLogin &&
-                    value != -1) {
-                  Navigator.pushReplacementNamed(context, MainPage.id);
-                } else {
-                  Navigator.pushReplacementNamed(context, LoginPage.id);
-                }
-              });
-            }),
-            builder: (context, snapshot) => const SizedBox(),
-          ),
+          // FutureBuilder(
+          //   future: HelperSharedPreferences.getExpirationTime().then((value) {
+          //     int timeNow = DateTime.now().millisecondsSinceEpoch;
+          //     Future.delayed(const Duration(seconds: 3)).then((_) {
+          //       if (value != null &&
+          //           value >= timeNow &&
+          //           isLogin &&
+          //           value != -1) {
+          //         Navigator.pushNamedAndRemoveUntil(context, MainPage.id,(Route<dynamic> route) => false);
+          //
+          //       } else {
+          //         Navigator.pushNamedAndRemoveUntil(context, LoginPage.id,(Route<dynamic> route) => false);
+          //       }
+          //     });
+          //   }),
+          //   builder: (context, snapshot) => const SizedBox(),
+          // ),
         ],
       ),
     );

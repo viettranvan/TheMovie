@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_login_facebook/flutter_login_facebook.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:the_movie/pages/pages.dart';
 import 'package:the_movie/services/auth.dart';
@@ -53,6 +54,9 @@ class _ProfilePageState extends State<ProfilePage> {
       ],
     );
 
+    final _facebookLogin = FacebookLogin(debug: true);
+
+
     void onLogOut() async {
       try {
         showDialog(
@@ -68,8 +72,13 @@ class _ProfilePageState extends State<ProfilePage> {
                   break;
                 case 1:
                   await _googleSignIn.disconnect();
+                  await _googleSignIn.signOut();
+                  break;
+                case 2:
+                  await _facebookLogin.logOut();
                   break;
               }
+              await AuthService().signOut();
               await HelperSharedPreferences.saveUid('');
               await HelperSharedPreferences.saveToken('');
               await HelperSharedPreferences.saveLoginType(-1);

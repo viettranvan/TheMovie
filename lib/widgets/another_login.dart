@@ -1,11 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:the_movie/pages/pages.dart';
-import 'package:the_movie/services/auth.dart';
 import 'package:the_movie/services/services.dart';
 import 'package:the_movie/values/values.dart';
 import 'package:the_movie/widgets/widgets.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 class AnotherLoginMethod extends StatelessWidget {
   const AnotherLoginMethod({Key? key, required this.onFacebookLogin})
@@ -15,9 +13,6 @@ class AnotherLoginMethod extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-    final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ["email"]);
 
     void gotoMainPage() {
       Navigator.pushReplacementNamed(context, MainPage.id);
@@ -25,6 +20,58 @@ class AnotherLoginMethod extends StatelessWidget {
       //   Navigator.pushReplacementNamed(context, MainPage.id);
       // });
     }
+
+    void onGoogleLogin() async{
+      final auth = FirebaseAuth.instance;
+      try {
+        await AuthService().signInWithGoogle(context: context);
+        if (auth.currentUser != null) {
+          var idTokenResult = await auth.currentUser!.getIdTokenResult();
+          String uid = auth.currentUser!.uid;
+          String token = idTokenResult.token ?? '';
+          int expirationTime =
+              idTokenResult.expirationTime!.millisecondsSinceEpoch;
+          await HelperSharedPreferences.saveUid(uid);
+          await HelperSharedPreferences.saveToken(token);
+          await HelperSharedPreferences.saveLoginType(1);
+          await HelperSharedPreferences.saveExpirationTime(
+              expirationTime);
+          await HelperSharedPreferences.saveLogin(true);
+          Navigator.pop(context); // close loading dialog
+          gotoMainPage();
+        }
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+    }
+
+    Future<void> onFacebookLogin() async{
+      final auth = FirebaseAuth.instance;
+      try{
+        await AuthService().signInWithFacebook(context: context);
+
+        if (auth.currentUser != null) {
+          var idTokenResult = await auth.currentUser!.getIdTokenResult();
+          String uid = auth.currentUser!.uid;
+          String token = idTokenResult.token ?? '';
+          int expirationTime =
+              idTokenResult.expirationTime!.millisecondsSinceEpoch;
+          await HelperSharedPreferences.saveUid(uid);
+          await HelperSharedPreferences.saveToken(token);
+          await HelperSharedPreferences.saveLoginType(2);
+          await HelperSharedPreferences.saveExpirationTime(
+              expirationTime);
+          await HelperSharedPreferences.saveLogin(true);
+          // Navigator.pop(context); // close loading dialog
+          gotoMainPage();
+        }
+
+      }catch (e) {
+        debugPrint(e.toString());
+      }
+    }
+
+
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,31 +88,7 @@ class AnotherLoginMethod extends StatelessWidget {
           ],
         ),
         GestureDetector(
-          onTap: () async {
-            final auth = FirebaseAuth.instance;
-
-            try {
-
-              await AuthService().signInWithGoogle(context: context);
-              if (auth.currentUser != null) {
-                var idTokenResult = await auth.currentUser!.getIdTokenResult();
-                String uid = auth.currentUser!.uid;
-                String token = idTokenResult.token ?? '';
-                int expirationTime =
-                    idTokenResult.expirationTime!.millisecondsSinceEpoch;
-                await HelperSharedPreferences.saveUid(uid);
-                await HelperSharedPreferences.saveToken(token);
-                await HelperSharedPreferences.saveLoginType(1);
-                await HelperSharedPreferences.saveExpirationTime(
-                    expirationTime);
-                await HelperSharedPreferences.saveLogin(true);
-                Navigator.pop(context); // close loading dialog
-                gotoMainPage();
-              }
-            } catch (e) {
-              debugPrint(e.toString());
-            }
-          },
+          onTap: () => onGoogleLogin(),
           child: Container(
             height: 50,
             width: double.infinity,
@@ -93,7 +116,7 @@ class AnotherLoginMethod extends StatelessWidget {
         ),
         const SizedBox(height: 15.0),
         GestureDetector(
-          onTap: onFacebookLogin,
+          onTap: () => onFacebookLogin(),
           child: Container(
             height: 50,
             width: double.infinity,

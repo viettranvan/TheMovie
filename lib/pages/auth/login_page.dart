@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:the_movie/blocs/blocs.dart';
@@ -39,7 +40,7 @@ class LoginPage extends StatelessWidget {
       Navigator.of(context).pushNamed(ForgotPasswordPage.id);
     }
 
-    void gotoMainPage(Authentication auth) async{
+    void gotoMainPage(Authentication auth) async {
       await HelperSharedPreferences.saveUid(auth.uid);
       await HelperSharedPreferences.saveToken(auth.token);
       await HelperSharedPreferences.saveLoginType(0);
@@ -52,8 +53,9 @@ class LoginPage extends StatelessWidget {
     }
 
     void gotoVerifyPage() {
-      WidgetsBinding.instance!.addPostFrameCallback((_){
-        Navigator.pushNamedAndRemoveUntil(context,VerifyEmail.id,(Route<dynamic> route) => false);
+      WidgetsBinding.instance!.addPostFrameCallback((_) {
+        Navigator.pushNamedAndRemoveUntil(
+            context, VerifyEmail.id, (Route<dynamic> route) => false);
       });
     }
 
@@ -111,7 +113,8 @@ class LoginPage extends StatelessWidget {
 
                         case LoginSuccess:
                           Navigator.maybePop(context);
-                          Authentication auth = (state as LoginSuccess).authentication;
+                          Authentication auth =
+                              (state as LoginSuccess).authentication;
                           gotoMainPage(auth);
                           break;
                         default:
@@ -158,6 +161,7 @@ class LoginPage extends StatelessWidget {
                     buttonColor: AppColor.red,
                   ),
                   const SizedBox(height: 20.0),
+
                   AnotherLoginMethod(
                     onFacebookLogin: () {},
                   ),

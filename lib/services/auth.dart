@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_login_facebook/flutter_login_facebook.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:the_movie/models/models.dart';
 import 'package:the_movie/widgets/widgets.dart';
@@ -45,7 +46,7 @@ class AuthService {
     }
   }
 
-  Future signOut() async =>  _auth.signOut();
+  Future signOut() async => _auth.signOut();
 
   Future sendPasswordResetEmail(String email) async {
     try {
@@ -64,15 +65,13 @@ class AuthService {
     final GoogleSignIn googleSignIn = GoogleSignIn();
 
     final GoogleSignInAccount? googleSignInAccount =
-    await googleSignIn.signIn();
+        await googleSignIn.signIn();
 
     if (googleSignInAccount != null) {
-      showDialog(
-          context: context,
-          builder: (context) => const LoadingDialog());
+      showDialog(context: context, builder: (context) => const LoadingDialog());
 
       final GoogleSignInAuthentication googleSignInAuthentication =
-      await googleSignInAccount.authentication;
+          await googleSignInAccount.authentication;
 
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleSignInAuthentication.accessToken,
@@ -81,19 +80,63 @@ class AuthService {
 
       try {
         final UserCredential userCredential =
-        await _auth.signInWithCredential(credential);
+            await _auth.signInWithCredential(credential);
 
         user = userCredential.user;
       } on FirebaseAuthException catch (e) {
         if (e.code == 'account-exists-with-different-credential') {
           // handle the error here
-        }
-        else if (e.code == 'invalid-credential') {
+        } else if (e.code == 'invalid-credential') {
           // handle the error here
         }
       } catch (e) {
         // handle the error here
       }
+    }
+
+    return user;
+  }
+
+  Future<User?> signInWithFacebook({required BuildContext context}) async {
+    User? user;
+
+    final fb = FacebookLogin();
+
+    // Log in
+    final facebookSignInAccount = await fb.logIn(permissions: [
+      FacebookPermission.publicProfile,
+      FacebookPermission.email,
+    ]);
+
+    switch (facebookSignInAccount.status) {
+      case FacebookLoginStatus.success:
+        final AuthCredential credential = FacebookAuthProvider.credential(
+            facebookSignInAccount.accessToken?.token ?? '');
+        try {
+          final UserCredential userCredential =
+          await _auth.signInWithCredential(credential);
+
+          user = userCredential.user;
+        } on FirebaseAuthException catch (e) {
+          if (e.code == 'account-exists-with-different-credential') {
+            debugPrint(e.code);
+          } else if (e.code == 'invalid-credential') {
+            debugPrint(e.code);
+            // handle the error here
+          }
+        } catch (e) {
+          // handle the error here
+        }
+        break;
+
+      case FacebookLoginStatus.cancel:
+        // User cancel log in
+        debugPrint('cancel:');
+        break;
+      case FacebookLoginStatus.error:
+        // Log in failed
+        debugPrint('Error while log in: ${facebookSignInAccount.error}');
+        break;
     }
 
     return user;
