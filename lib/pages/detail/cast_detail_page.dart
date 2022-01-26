@@ -3,6 +3,7 @@ import 'package:the_movie/values/values.dart';
 import 'package:the_movie/widgets/widgets.dart';
 
 class CastDetailPage extends StatelessWidget {
+  static const String id = 'cast_detail';
   const CastDetailPage({Key? key}) : super(key: key);
 
   @override

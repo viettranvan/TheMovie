@@ -5,6 +5,7 @@ import 'package:the_movie/blocs/blocs.dart';
 import 'package:the_movie/pages/pages.dart';
 import 'package:the_movie/values/values.dart';
 import 'package:the_movie/widgets/widgets.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -13,6 +14,22 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final _auth = FirebaseAuth.instance;
     String username = _auth.currentUser?.displayName ?? 'Guest';
+
+    void playOfficialTrailer(String? key) async {
+      if (key == null) {
+        debugPrint('Video key is null!');
+      } else {
+        final url = youtubeUrl + key;
+        if (await canLaunch(url)) {
+          await launch(url);
+        }
+      }
+    }
+
+    void gotoDetail(int movieId) {
+      Navigator.of(context)
+          .pushNamed(MovieDetailPage.id, arguments: {argsKeyMovieId: movieId});
+    }
 
     return Scaffold(
       body: SafeArea(
@@ -41,10 +58,9 @@ class HomePage extends StatelessWidget {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(35.0),
                             image: const DecorationImage(
-                              image:
-                                  AssetImage('assets/images/placeholder.gif'),
-                              fit: BoxFit.cover
-                            )),
+                                image:
+                                    AssetImage('assets/images/placeholder.gif'),
+                                fit: BoxFit.cover)),
                       );
                     case MovieLoaded:
                       return OfficialTrailerCard(
@@ -56,11 +72,10 @@ class HomePage extends StatelessWidget {
                             ? noPosterImage
                             : baseUrlImage +
                                 '${state.popularList.first.posterPath}',
-                        onGotoDetail: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (context) => const MovieDetailPage()),
-                        ),
-                        onPlayMovie: () => print('play'),
+                        onGotoDetail: () =>
+                            gotoDetail(state.popularList.first.id ?? 1),
+                        onPlayMovie: () =>
+                            playOfficialTrailer(state.popularVideo.key),
                       );
                   }
                   return const SizedBox();

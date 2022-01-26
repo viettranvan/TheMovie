@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:the_movie/values/values.dart';
 
@@ -30,10 +32,18 @@ class HomeMovieCard extends StatelessWidget {
                 BoxDecoration(borderRadius: BorderRadius.circular(35.0)),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(35.0),
-              child: FadeInImage(
-                placeholder: placeholderImage,
-                image: NetworkImage(poster),
+              child: CachedNetworkImage(
+                imageUrl: poster,
                 fit: BoxFit.cover,
+                placeholder: (context, url) => Container(
+                  height: 400.0,
+                  width: 300.0,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(35.0),
+                    image: const DecorationImage(image: placeholderImage,fit: BoxFit.cover),
+                  ),
+                ),
+                // Image.asset('assets/images/placeholder.gif',fit: BoxFit.cover,),
               ),
             ),
           ),
@@ -49,11 +59,10 @@ class HomeMovieCard extends StatelessWidget {
                   width: double.infinity,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(25.0),
-                      border: Border.all(width: 1.0,color: AppColor.black25),
+                      border: Border.all(width: 1.0, color: AppColor.black25),
                       color: AppColor.blur),
                   child: Center(
-                      child: Text(movieName,
-                          style: kTextSize20w400White)),
+                      child: Text(movieName, style: kTextSize20w400White)),
                 ),
               ),
             ),
@@ -69,7 +78,7 @@ class HomeMovieCard extends StatelessWidget {
                   width: 90.0,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(18.0),
-                      border: Border.all(width: 1.0,color: AppColor.black25),
+                      border: Border.all(width: 1.0, color: AppColor.black25),
                       color: AppColor.blur),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,

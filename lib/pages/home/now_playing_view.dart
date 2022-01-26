@@ -71,7 +71,11 @@ class _NowPlayingViewState extends State<NowPlayingView> {
                       horizontal: 0.0, vertical: 0.0)
                       : const EdgeInsets.symmetric(
                       horizontal: 10.0, vertical: 20.0),
-                  child: Image.asset('assets/images/placeholder.gif',fit: BoxFit.cover,),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(35.0),
+                    image: const DecorationImage(
+                        image: placeholderImage, fit: BoxFit.cover),
+                  ),
                 ),
               );
             },

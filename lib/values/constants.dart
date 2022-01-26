@@ -18,6 +18,9 @@ const String youtubeUrl = "https://www.youtube.com/embed/";
 const String baseURL = "https://api.themoviedb.org/3";
 const String apiKey = "69174be844f78c34aaf4cc655a1f74bb";
 
+const String argsKeyMovieId = 'movieId';
+
+
 const ImageProvider placeholderImage =
     AssetImage('assets/images/placeholder.gif');
 

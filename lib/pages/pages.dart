@@ -13,6 +13,9 @@ export 'home/top_rated_view.dart';
 export 'detail/cast_detail_page.dart';
 export 'detail/crew_detail_page.dart';
 export 'detail/movie_detail_page.dart';
+export 'detail/relative_movie_view.dart';
+export 'detail/relative_tv_show_view.dart';
+export 'detail/cast_and_crew_view.dart';
 
 ///  Profile Page
 export 'profile/profile_page.dart';

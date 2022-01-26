@@ -66,10 +66,14 @@ class _TopRatedViewState extends State<TopRatedView> {
                 child: Container(
                   margin: _currentIndex == index
                       ? const EdgeInsets.symmetric(
-                      horizontal: 0.0, vertical: 0.0)
+                          horizontal: 0.0, vertical: 0.0)
                       : const EdgeInsets.symmetric(
-                      horizontal: 10.0, vertical: 20.0),
-                  child: Image.asset('assets/images/placeholder.gif',fit: BoxFit.cover,),
+                          horizontal: 10.0, vertical: 20.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(35.0),
+                    image: const DecorationImage(
+                        image: placeholderImage, fit: BoxFit.cover),
+                  ),
                 ),
               );
             },

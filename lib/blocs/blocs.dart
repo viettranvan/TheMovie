@@ -13,6 +13,16 @@ export 'auth/sign_up/sign_up_bloc.dart';
 export 'auth/sign_up/sign_up_event.dart';
 export 'auth/sign_up/sign_up_state.dart';
 
+/// detail bloc -> Movie detail
+export 'detail/movie_detail/movie_detail_bloc.dart';
+export 'detail/movie_detail/movie_detail_state.dart';
+export 'detail/movie_detail/movie_detail_event.dart';
+
+/// detail bloc -> tv series detail
+export 'detail/tv_series_detail/tv_series_detail_bloc.dart';
+export 'detail/tv_series_detail/tv_series_detail_state.dart';
+export 'detail/tv_series_detail/tv_series_detail_event.dart';
+
 /// Movie bloc
 export 'home/home_movie_bloc.dart';
 export 'home/home_movie_event.dart';

@@ -3,9 +3,9 @@ import 'package:the_movie/values/values.dart';
 import 'package:the_movie/widgets/widgets.dart';
 
 class CrewDetailPage extends StatelessWidget {
+  static const String id = 'crew_detail';
+
   const CrewDetailPage({Key? key}) : super(key: key);
-
-
 
   @override
   Widget build(BuildContext context) {

@@ -91,23 +91,6 @@ class _SplashScreenState extends State<SplashScreen> {
               fit: BoxFit.cover,
             ),
           ),
-          // FutureBuilder(
-          //   future: HelperSharedPreferences.getExpirationTime().then((value) {
-          //     int timeNow = DateTime.now().millisecondsSinceEpoch;
-          //     Future.delayed(const Duration(seconds: 3)).then((_) {
-          //       if (value != null &&
-          //           value >= timeNow &&
-          //           isLogin &&
-          //           value != -1) {
-          //         Navigator.pushNamedAndRemoveUntil(context, MainPage.id,(Route<dynamic> route) => false);
-          //
-          //       } else {
-          //         Navigator.pushNamedAndRemoveUntil(context, LoginPage.id,(Route<dynamic> route) => false);
-          //       }
-          //     });
-          //   }),
-          //   builder: (context, snapshot) => const SizedBox(),
-          // ),
         ],
       ),
     );
