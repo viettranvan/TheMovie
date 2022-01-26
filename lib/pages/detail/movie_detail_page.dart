@@ -6,6 +6,7 @@ import 'package:the_movie/pages/pages.dart';
 import 'package:the_movie/values/values.dart';
 import 'package:the_movie/widgets/widgets.dart';
 import 'package:readmore/readmore.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MovieDetailPage extends StatelessWidget {
   static const String id = 'movie_detail';
@@ -16,8 +17,19 @@ class MovieDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as Map;
 
-    void openVideo() {
-      print('args: ${args[argsKeyMovieId]}');
+    void openVideo(String? key) async{
+      if (key == null) {
+        debugPrint('Video key is null!');
+      } else {
+        final url = youtubeUrl + key;
+        if (await canLaunch(url)) {
+          await launch(url);
+        }
+      }
+    }
+
+    void gotoCastAndCrewPage(){
+      Navigator.of(context).pushNamed(CastAndCrewPage.id);
     }
 
     return Scaffold(
@@ -74,17 +86,20 @@ class MovieDetailPage extends StatelessWidget {
                           FadeInImage(
                             image: NetworkImage((state as MovieDetailLoaded)
                                         .movieDetail
-                                        .posterPath ==
+                                        .backdropPath ==
                                     null
                                 ? noPosterImage
                                 : baseUrlImage +
-                                    '${state.movieDetail.posterPath}'),
+                                    '${state.movieDetail.backdropPath}'),
                             placeholder: placeholderImage,
                             height: 300.0,
                             width: double.infinity,
                             fit: BoxFit.cover,
                           ),
-                          ButtonPlay(onTap: () => openVideo()),
+                          state.videos.isNotEmpty
+                              ? ButtonPlay(
+                                  onTap: () => openVideo(state.videos[0].key))
+                              : const SizedBox(),
                         ],
                       ),
                       Padding(
@@ -196,10 +211,7 @@ class MovieDetailPage extends StatelessWidget {
                                     style: kTextSize20w500White),
                                 const Spacer(),
                                 GestureDetector(
-                                  onTap: () => Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              CastAndCrewPage())),
+                                  onTap: () => gotoCastAndCrewPage(),
                                   child: const Text(
                                     'More...',
                                     style: kTextSize15w400White,

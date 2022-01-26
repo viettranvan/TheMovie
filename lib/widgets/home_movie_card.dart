@@ -62,7 +62,7 @@ class HomeMovieCard extends StatelessWidget {
                       border: Border.all(width: 1.0, color: AppColor.black25),
                       color: AppColor.blur),
                   child: Center(
-                      child: Text(movieName, style: kTextSize20w400White)),
+                      child: Text(movieName, style: kTextSize20w400White,textAlign: TextAlign.center,)),
                 ),
               ),
             ),

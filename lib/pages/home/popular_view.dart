@@ -4,6 +4,7 @@ import 'package:the_movie/widgets/widgets.dart';
 
 import '../../blocs/blocs.dart';
 import '../../values/values.dart';
+import '../pages.dart';
 
 class PopularView extends StatefulWidget {
   const PopularView({Key? key}) : super(key: key);
@@ -15,11 +16,16 @@ class PopularView extends StatefulWidget {
 
 class _PopularViewState extends State<PopularView> {
   int _currentIndex = 0;
-  String image2 =
-      'https://image.tmdb.org/t/p/w500/qtX2Fg9MTmrbgN1UUvGoCsImTM8.jpg';
+
 
   @override
   Widget build(BuildContext context) {
+
+    void onGotoDetail(int movieId){
+      Navigator.of(context)
+          .pushNamed(MovieDetailPage.id, arguments: {argsKeyMovieId: movieId});
+    }
+
     return BlocBuilder<HomeMovieBloc, HomeMovieState>(
       builder: (context,state){
       if (state is MovieLoaded) {
@@ -47,7 +53,7 @@ class _PopularViewState extends State<PopularView> {
                         ? noPosterImage
                         : baseUrlImage +
                         '${state.popularList[index].posterPath}',
-                    onGotoDetail: () => print('top rated: $index'),
+                    onGotoDetail: () => onGotoDetail(state.popularList[index].id ?? 1),
                     movieName: state.popularList[index].title ?? "",
                     voteAverage:
                     state.popularList[index].voteAverage.toString(),

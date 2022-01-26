@@ -5,7 +5,9 @@ import 'package:the_movie/values/values.dart';
 import 'package:the_movie/widgets/widgets.dart';
 
 class CastAndCrewPage extends StatefulWidget {
-  CastAndCrewPage({Key? key}) : super(key: key);
+  static const String id = 'cast_and_crew_page';
+
+  const CastAndCrewPage({Key? key}) : super(key: key);
 
   @override
   State<CastAndCrewPage> createState() => _CastAndCrewPageState();
@@ -13,8 +15,8 @@ class CastAndCrewPage extends StatefulWidget {
 
 class _CastAndCrewPageState extends State<CastAndCrewPage> {
   final List<Tab> myTabs = <Tab>[
-    Tab(text: 'Cast'),
-    Tab(text: 'Crew'),
+    const Tab(text: 'Cast'),
+    const Tab(text: 'Crew'),
   ];
 
   int tabIndex = 0;

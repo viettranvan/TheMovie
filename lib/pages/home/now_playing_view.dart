@@ -4,6 +4,7 @@ import 'package:the_movie/widgets/widgets.dart';
 
 import '../../blocs/blocs.dart';
 import '../../values/values.dart';
+import '../pages.dart';
 
 class NowPlayingView extends StatefulWidget {
   const NowPlayingView({Key? key}) : super(key: key);
@@ -19,6 +20,12 @@ class _NowPlayingViewState extends State<NowPlayingView> {
 
   @override
   Widget build(BuildContext context) {
+
+    void onGotoDetail(int movieId){
+      Navigator.of(context)
+          .pushNamed(MovieDetailPage.id, arguments: {argsKeyMovieId: movieId});
+    }
+
     return BlocBuilder<HomeMovieBloc, HomeMovieState>(
       builder: (context,state){
         if (state is MovieLoaded) {
@@ -46,7 +53,7 @@ class _NowPlayingViewState extends State<NowPlayingView> {
                           ? noPosterImage
                           : baseUrlImage +
                           '${state.nowPlayingList[index].posterPath}',
-                      onGotoDetail: () => print('top rated: $index'),
+                      onGotoDetail: () => onGotoDetail(state.nowPlayingList[index].id ?? 1),
                       movieName: state.nowPlayingList[index].title ?? "",
                       voteAverage:
                       state.nowPlayingList[index].voteAverage.toString(),

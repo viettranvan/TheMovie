@@ -9,10 +9,14 @@ class GoBackButton extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(top: 15.0),
       child: FloatingActionButton(
-        onPressed: () => Navigator.of(context).pop(),
-        child: const Icon(Icons.arrow_back,size: 30.0,color: AppColor.white),
-        backgroundColor: AppColor.blur,
+        elevation: 0,
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        backgroundColor: AppColor.grey,
+        child: const Icon(Icons.arrow_back,size: 30.0,color: AppColor.white)
       ),
+
     );
   }
 }
