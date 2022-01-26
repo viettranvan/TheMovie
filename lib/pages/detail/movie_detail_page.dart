@@ -17,7 +17,7 @@ class MovieDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as Map;
 
-    void openVideo(String? key) async{
+    void openVideo(String? key) async {
       if (key == null) {
         debugPrint('Video key is null!');
       } else {
@@ -28,8 +28,17 @@ class MovieDetailPage extends StatelessWidget {
       }
     }
 
-    void gotoCastAndCrewPage(){
-      Navigator.of(context).pushNamed(CastAndCrewPage.id);
+    void gotoCastAndCrewPage(
+        // type: 1 -> Movie
+        // type: 2 -> TvSeries
+        {required int? idMovie,
+        required String? movieName,
+        required int type}) {
+      Navigator.of(context).pushNamed(CastAndCrewPage.id, arguments: {
+        argsKeyMovieId: idMovie,
+        argsKeyMovieName: movieName,
+        argsKeyType: type
+      });
     }
 
     return Scaffold(
@@ -46,20 +55,7 @@ class MovieDetailPage extends StatelessWidget {
                     MovieDetailStartedEvent(idMovie: args[argsKeyMovieId]));
                 break;
               case MovieDetailLoading:
-                return Column(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: Center(
-                        child: SizedBox(
-                            height: 60,
-                            width: 60,
-                            child: Image.asset(
-                                'assets/images/image_placeholder.gif')),
-                      ),
-                    ),
-                  ],
-                );
+                return const LoadingPlaceholder();
               case MovieDetailError:
                 return Column(
                   children: const [
@@ -211,7 +207,10 @@ class MovieDetailPage extends StatelessWidget {
                                     style: kTextSize20w500White),
                                 const Spacer(),
                                 GestureDetector(
-                                  onTap: () => gotoCastAndCrewPage(),
+                                  onTap: () => gotoCastAndCrewPage(
+                                      idMovie: state.movieDetail.id,
+                                      movieName: state.movieDetail.title,
+                                      type: 1),
                                   child: const Text(
                                     'More...',
                                     style: kTextSize15w400White,

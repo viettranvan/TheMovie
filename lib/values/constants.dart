@@ -18,8 +18,12 @@ const String youtubeUrl = "https://www.youtube.com/embed/";
 const String baseURL = "https://api.themoviedb.org/3";
 const String apiKey = "69174be844f78c34aaf4cc655a1f74bb";
 
+const String argsKeyType = "Type"; // 1: Movie, 2: TVSeries
 const String argsKeyMovieId = 'movieId';
+const String argsKeyMovieName = 'movieName';
 
+const String argsKeyTvSeriesId = 'tvSeriesId';
+const String argsKeyTvSeriesName = 'tvSeriesName';
 
 const ImageProvider placeholderImage =
     AssetImage('assets/images/placeholder.gif');

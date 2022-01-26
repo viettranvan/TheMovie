@@ -1,28 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:the_movie/blocs/blocs.dart';
 import 'package:the_movie/pages/cast_and_crew/cast_view.dart';
 import 'package:the_movie/pages/pages.dart';
+import 'package:the_movie/repositories/cast_and_crew_repository.dart';
 import 'package:the_movie/values/values.dart';
 import 'package:the_movie/widgets/widgets.dart';
 
-class CastAndCrewPage extends StatefulWidget {
+class CastAndCrewPage extends StatelessWidget {
   static const String id = 'cast_and_crew_page';
 
   const CastAndCrewPage({Key? key}) : super(key: key);
 
   @override
-  State<CastAndCrewPage> createState() => _CastAndCrewPageState();
-}
-
-class _CastAndCrewPageState extends State<CastAndCrewPage> {
-  final List<Tab> myTabs = <Tab>[
-    const Tab(text: 'Cast'),
-    const Tab(text: 'Crew'),
-  ];
-
-  int tabIndex = 0;
-
-  @override
   Widget build(BuildContext context) {
+    final List<Tab> myTabs = <Tab>[
+      const Tab(text: 'Cast'),
+      const Tab(text: 'Crew'),
+    ];
+
+    final args = ModalRoute.of(context)!.settings.arguments as Map;
+
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -33,7 +31,8 @@ class _CastAndCrewPageState extends State<CastAndCrewPage> {
         ),
         body: Column(
           children: [
-            const Text('Cast And Crew in: Movie Name'),
+            const SizedBox(height: 10.0),
+            Text('Cast And Crew in: ${args[argsKeyMovieName]}'),
             TabBar(
               isScrollable: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -47,16 +46,52 @@ class _CastAndCrewPageState extends State<CastAndCrewPage> {
               labelStyle: kTextSize20w400White,
               onTap: (int index) {
                 debugPrint(index.toString());
-                // discoverBloc.add(OnChangeTab(index));
-                setState(() {
-                  tabIndex = index;
-                });
+                BlocProvider.of<CastAndCrewBloc>(context)
+                    .add(OnChangeTab(index));
               },
             ),
+            const SizedBox(height: 10.0),
             Expanded(
-              child: IndexedStack(
-                index: tabIndex,
-                children: const [CastView(), CrewView()],
+              child: BlocBuilder<CastAndCrewBloc, CastAndCrewState>(
+                builder: (context, state) {
+                  return args[argsKeyType] == 1 ? IndexedStack(
+                    index: (state as CastAndCrewInitial).index,
+                    children: [
+                      BlocProvider(
+                        create: (context) =>
+                            CastViewBloc(CastAndCrewRepository())
+                              ..add(LoadCastInMovieEvent(
+                                  idMovie: args[argsKeyMovieId])),
+                        child: const CastView(),
+                      ),
+                      BlocProvider(
+                        create: (context) =>
+                            CrewViewBloc(CastAndCrewRepository())
+                              ..add(LoadCrewInMovieEvent(
+                                  idMovie: args[argsKeyMovieId])),
+                        child: const CrewView(),
+                      ),
+                    ],
+                  ) : IndexedStack(
+                    index: (state as CastAndCrewInitial).index,
+                    children: [
+                      BlocProvider(
+                        create: (context) =>
+                        CastViewBloc(CastAndCrewRepository())
+                          ..add(LoadCastInTVSeriesEvent(
+                              idTv: args[argsKeyMovieId])),
+                        child: const CastView(),
+                      ),
+                      BlocProvider(
+                        create: (context) =>
+                        CrewViewBloc(CastAndCrewRepository())
+                          ..add(LoadCrewInTVSeriesEvent(
+                              idTv: args[argsKeyMovieId])),
+                        child: const CrewView(),
+                      ),
+                    ],
+                  );
+                },
               ),
             ),
           ],

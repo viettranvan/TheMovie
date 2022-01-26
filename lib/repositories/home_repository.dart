@@ -19,5 +19,4 @@ class HomeRepository{
 
   Future<List<Video>> getVideoFromMovie({required int movieId}) =>
       _movieAPI.getVideoFromMovie(movieId: movieId);
-
 }

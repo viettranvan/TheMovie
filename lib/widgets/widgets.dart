@@ -10,6 +10,7 @@ export 'gridview_item.dart';
 export 'home_movie_card.dart';
 export 'horizontal_divider.dart';
 export 'loading_dialog.dart';
+export 'loading_placeholder.dart';
 export 'my_clipper.dart';
 export 'official_trailer_card.dart';
 export 'person_card.dart';

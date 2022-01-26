@@ -48,7 +48,10 @@ class TheMovieApp extends StatelessWidget {
               create: (context) => MovieDetailBloc(DetailRepository()),
               child: const MovieDetailPage(),
             ),
-        CastAndCrewPage.id: (context) => const CastAndCrewPage(),
+        CastAndCrewPage.id: (context) => BlocProvider(
+          create: (context) => CastAndCrewBloc(),
+          child: const CastAndCrewPage(),
+        ),
         CastDetailPage.id: (context) => const CastDetailPage(),
         CrewDetailPage.id: (context) => const CrewDetailPage(),
         // CastDetailPage.id: (context) => BlocProvider(

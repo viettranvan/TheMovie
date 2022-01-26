@@ -16,12 +16,12 @@ class CastAndCrewView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    void  gotoCastDetail(){
-      Navigator.of(context).pushNamed(CastDetailPage.id);
+    void gotoCastDetail(Cast cast) {
+      Navigator.of(context).pushNamed(CastDetailPage.id, arguments: cast);
     }
-    void  gotoCrewDetail(){
-      Navigator.of(context).pushNamed(CrewDetailPage.id);
+
+    void gotoCrewDetail(Crew crew) {
+      Navigator.of(context).pushNamed(CrewDetailPage.id, arguments: crew);
     }
 
     return (casts.length + crews.length) > 10
@@ -35,7 +35,7 @@ class CastAndCrewView extends StatelessWidget {
               itemBuilder: (context, index) {
                 if (index > casts.length) {
                   return GestureDetector(
-                    onTap: () => gotoCrewDetail(),
+                    onTap: () => gotoCrewDetail(crews[index - casts.length]),
                     child: CastAndCrewCard(
                         avatar: crews[index - casts.length].profilePath == null
                             ? noProfileImage
@@ -45,7 +45,7 @@ class CastAndCrewView extends StatelessWidget {
                   );
                 }
                 return GestureDetector(
-                  onTap: () => gotoCastDetail(),
+                  onTap: () => gotoCastDetail(casts[index]),
                   child: CastAndCrewCard(
                       avatar: casts[index].profilePath == null
                           ? noProfileImage

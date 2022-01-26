@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:the_movie/values/values.dart';
 import 'package:the_movie/widgets/widgets.dart';
 
+import '../../models/models.dart';
+
 class CrewDetailPage extends StatelessWidget {
   static const String id = 'crew_detail';
 
@@ -10,8 +12,7 @@ class CrewDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    int gender = 2;
-    
+    final args = ModalRoute.of(context)!.settings.arguments as Crew;
 
     return Scaffold(
       floatingActionButton: const GoBackButton(),
@@ -23,14 +24,16 @@ class CrewDetailPage extends StatelessWidget {
             children: [
               ClipPath(
                 clipper: MyClipper(),
-                child: const SizedBox(
+                child: SizedBox(
                   height: 600.0,
                   width: double.infinity,
                   child: FadeInImage(
-                    image: NetworkImage(image),
+                    image: NetworkImage(args.profilePath == null
+                        ? noProfileImage
+                        : baseUrlImage + '${args.profilePath}'),
                     fit: BoxFit.cover,
                     placeholder: placeholderImage,
-                  ),
+                  )
                 ),
               ),
 
@@ -39,21 +42,22 @@ class CrewDetailPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Center(
-                      child: Text('Gemma Chan', style: kTextSize30w400White),
+                     Center(
+                      child: Text('${args.originalName}', style: kTextSize30w400White),
                     ),
                     const SizedBox(height: 10.0),
-                    const Text('Original name: Ryuk', style: kTextSize15w400White),
+                    Text('Original name: ${args.originalName}',
+                        style: kTextSize15w400White),
                     const SizedBox(height: 8.0),
 
                     Row(
                       children: [
-                        Text('Gender:${getGender(gender)}',style: kTextSize15w400White),
+                        Text('Gender:${getGender(args.gender ?? 0)}',style: kTextSize15w400White),
                         const SizedBox(width: 5.0),
-                        Icon(getIconDataGender(gender),color: AppColor.white),
+                        Icon(getIconDataGender(args.gender ?? 0),color: AppColor.white),
                         const SizedBox(width: 25.0),
 
-                        Text('Popularity: 88.125',style: kTextSize15w400White),
+                        Text('Popularity: ${args.popularity}',style: kTextSize15w400White),
                         const SizedBox(width: 5.0),
                         const Icon(Icons.star,color: AppColor.white),
                       ],
@@ -65,10 +69,10 @@ class CrewDetailPage extends StatelessWidget {
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text('Role', style: kTextSize25w400White),
-                              const SizedBox(height: 10.0),
-                              const Text('Crew', style: kTextSize18w400White),
+                            children:const [
+                               Text('Role', style: kTextSize25w400White),
+                               SizedBox(height: 10.0),
+                               Text('Crew', style: kTextSize18w400White),
                             ],
                           ),
                         ),
@@ -78,7 +82,7 @@ class CrewDetailPage extends StatelessWidget {
                             children: [
                               const Text('Known for', style: kTextSize25w400White),
                               const SizedBox(height: 10.0),
-                              const Text('Acting', style: kTextSize18w400White),
+                               Text('${args.knownForDepartment}', style: kTextSize18w400White),
                             ],
                           ),
                         ),
@@ -95,7 +99,7 @@ class CrewDetailPage extends StatelessWidget {
                             children: [
                               const Text('Department', style: kTextSize25w400White),
                               const SizedBox(height: 10.0),
-                              const Text('Writting', style: kTextSize18w400White),
+                              Text('${args.department}', style: kTextSize18w400White),
                             ],
                           ),
                         ),
@@ -105,7 +109,7 @@ class CrewDetailPage extends StatelessWidget {
                             children: [
                               const Text('Job', style: kTextSize25w400White),
                               const SizedBox(height: 10.0),
-                              const Text('Characters', style: kTextSize18w400White),
+                              Text('${args.job}', style: kTextSize18w400White),
                             ],
                           ),
                         ),
