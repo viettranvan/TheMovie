@@ -7,14 +7,31 @@ const String image =
 const String image2 =
     'https://image.tmdb.org/t/p/w500/qtX2Fg9MTmrbgN1UUvGoCsImTM8.jpg';
 
-const String noPosterImage = 'https://www.prokerala.com/movies/assets/img/no-poster-available.jpg';
-const String noProfileImage =  "https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png";
+const String noPosterImage =
+    'https://www.prokerala.com/movies/assets/img/no-poster-available.jpg';
+const String noProfileImage =
+    "https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png";
 
 const String baseUrlImage = "https://image.tmdb.org/t/p/w500";
-const String youtubeUrl =  "https://www.youtube.com/embed/";
+const String youtubeUrl = "https://www.youtube.com/embed/";
+
+const String baseURL = "https://api.themoviedb.org/3";
+const String apiKey = "69174be844f78c34aaf4cc655a1f74bb";
 
 const ImageProvider placeholderImage =
     AssetImage('assets/images/placeholder.gif');
+
+const defaultParam = {
+  "api_key": apiKey,
+  "language": 'en-US',
+};
+
+Map<String,dynamic> paramWithPage({required int page}) {
+  return {
+    "api_key": apiKey,
+    "language": 'en-US',
+  };
+}
 
 String getGender(int gender) {
   String result = '';
@@ -76,9 +93,9 @@ Future<bool> onWillPop(BuildContext context) {
   return Future.value(true);
 }
 
-String checkFirebaseAuthExceptionError(FirebaseAuthException error){
+String checkFirebaseAuthExceptionError(FirebaseAuthException error) {
   String result = '';
-  switch(error.code){
+  switch (error.code) {
     case 'user-not-found':
       result = 'Your email provided is not registered!';
       break;
@@ -93,7 +110,6 @@ String checkFirebaseAuthExceptionError(FirebaseAuthException error){
       break;
     default:
       result = 'Login information is incorrect!';
-
   }
   return result;
 }

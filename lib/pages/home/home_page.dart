@@ -1,22 +1,18 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:the_movie/pages/pages.dart';
 import 'package:the_movie/values/values.dart';
 import 'package:the_movie/widgets/widgets.dart';
+import 'package:the_movie/apis/apis.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    GoogleSignIn _googleSignIn = GoogleSignIn(
-      scopes: <String>[
-        'email',
-        // 'https://www.googleapis.com/auth/contacts.readonly',
-      ],
-    );
-    String username = 'Guest';
+    final _auth = FirebaseAuth.instance;
+    String username = _auth.currentUser?.displayName ?? 'Guest';
+
 
     return Scaffold(
       body: SafeArea(
@@ -31,22 +27,18 @@ class HomePage extends StatelessWidget {
                 child: Text('Hello $username,', style: kTextSize30w400White),
               ),
               GestureDetector(
-                onTap: (){
-                  FirebaseAuth _auth =  FirebaseAuth.instance;
-                  var user = _auth.currentUser;
-                  var verifyEmail = user?.emailVerified;
-                  print('user:  ${user?.uid}');
-                  print('name:  ${user?.displayName}');
-                  print('name:  ${user?.photoURL}');
-                  user?.updatePhotoURL(
-                    'https://i.pinimg.com/236x/17/3d/6c/173d6c5ea458b677afa5a34a35d6eb55.jpg'
-                  );
-                  print('verifyEmail:  $verifyEmail');
+                onTap: () async{
+                  TVSeriesAPI credit = TVSeriesAPI();
+                  var a = await credit.getSimilarTVShow(tvId: 125,);
+                  var b = await credit.getVideoFromTV(tvId: 125,);
+                  var c = await credit.getTVDetail(tvId: 123);
+                  var d = await credit.getPopularTV(page: 1,);
 
-                  _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount? account) {
-                    print('account: $account');
-                  });
 
+                  print('getCastFromMovies $a\n');
+                  print('getCastFromMovies $b\n');
+                  print('getCastFromMovies $c\n');
+                  print('getCastFromMovies $d\n');
                 },
                 child: Text('Click $username,', style: kTextSize20w400White),
               ),
