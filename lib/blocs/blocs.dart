@@ -13,7 +13,11 @@ export 'auth/sign_up/sign_up_bloc.dart';
 export 'auth/sign_up/sign_up_event.dart';
 export 'auth/sign_up/sign_up_state.dart';
 
-/// home bloc
+/// Movie bloc
+export 'home/home_movie_bloc.dart';
+export 'home/home_movie_event.dart';
+export 'home/home_movie_state.dart';
+
 
 /// Profile Bloc
 export 'profile/profile_bloc.dart';

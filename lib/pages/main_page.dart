@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:the_movie/blocs/blocs.dart';
 import 'package:the_movie/pages/pages.dart';
+import 'package:the_movie/repositories/repositories.dart';
 import 'package:the_movie/values/values.dart';
 import 'package:the_movie/widgets/widgets.dart';
 
@@ -47,7 +48,10 @@ class _MainPageState extends State<MainPage> {
         ),
         body: TabBarView(
           children: [
-            const HomePage(),
+            BlocProvider(
+              create: (context) => HomeMovieBloc(HomeRepository()),
+              child: const HomePage(),
+            ),
             const DiscoverPage(),
             MultiBlocProvider(
               providers: [

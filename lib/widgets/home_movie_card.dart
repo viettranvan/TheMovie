@@ -27,7 +27,7 @@ class HomeMovieCard extends StatelessWidget {
             height: 400.0,
             width: 300.0,
             decoration:
-            BoxDecoration(borderRadius: BorderRadius.circular(35.0)),
+                BoxDecoration(borderRadius: BorderRadius.circular(35.0)),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(35.0),
               child: FadeInImage(
@@ -43,15 +43,17 @@ class HomeMovieCard extends StatelessWidget {
             right: 20.0,
             child: ClipRRect(
               child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 2.5, sigmaY: 2.5),
+                filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
                 child: Container(
                   height: 90.0,
                   width: double.infinity,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(25.0),
+                      border: Border.all(width: 1.0,color: AppColor.black25),
                       color: AppColor.blur),
                   child: Center(
-                      child: Text(movieName, style: kTextSize20w400White)),
+                      child: Text(movieName,
+                          style: kTextSize20w400White)),
                 ),
               ),
             ),
@@ -67,6 +69,7 @@ class HomeMovieCard extends StatelessWidget {
                   width: 90.0,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(18.0),
+                      border: Border.all(width: 1.0,color: AppColor.black25),
                       color: AppColor.blur),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -77,7 +80,7 @@ class HomeMovieCard extends StatelessWidget {
                         child: Text('IMDb', style: kTextSize10w400White),
                       ),
                       Row(
-                        children:  [
+                        children: [
                           const SizedBox(width: 10.0),
                           const Icon(
                             Icons.star,
