@@ -16,24 +16,26 @@ class ForgotPasswordPage extends StatefulWidget {
 }
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
-  final _emailController = TextEditingController();
 
-  void onSendEmail() async{
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => const LoadingDialog(),
-    );
-
-    BlocProvider.of<ForgotPasswordBloc>(context)
-        .add(SendEmailRequest(email: _emailController.text));
-
-  }
 
   @override
   Widget build(BuildContext context) {
+    ForgotPasswordBloc _bloc = BlocProvider.of<ForgotPasswordBloc>(context);
+
     void backToLogin() {
       Navigator.of(context).pushReplacementNamed(LoginPage.id);
+    }
+
+    void onSendEmail() async{
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const LoadingDialog(),
+      );
+
+      BlocProvider.of<ForgotPasswordBloc>(context)
+          .add(SendEmailRequest(email: _bloc.emailController.text));
+
     }
 
     return Scaffold(
@@ -103,7 +105,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 const SizedBox(height: 10.0),
                 ReusableTextField(
                   hintText: 'Enter your Email',
-                  controller: _emailController,
+                  controller: _bloc.emailController,
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.done,
                 ),

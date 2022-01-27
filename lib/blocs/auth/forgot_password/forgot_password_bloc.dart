@@ -11,6 +11,8 @@ import '../../blocs.dart';
 class ForgotPasswordBloc extends Bloc<ForgotPasswordEvent, ForgotPasswordState> {
   final AuthService authService;
 
+  final  emailController = TextEditingController();
+
   ForgotPasswordBloc({required this.authService}) : super(ForgotPasswordInitial()) {
     on<SendEmailRequest>(_onSendEmailRequest);
   }
@@ -35,11 +37,13 @@ class ForgotPasswordBloc extends Bloc<ForgotPasswordEvent, ForgotPasswordState> 
       debugPrint('error: $e');
     }
   }
-  @override
-  void onChange(Change<ForgotPasswordState> change) {
-    // TODO: implement onChange
-    super.onChange(change);
-    print(change);
-  }
 
+
+  @override
+  Future<void> close() {
+    // TODO: implement close
+    emailController.dispose();
+
+    return super.close();
+  }
 }

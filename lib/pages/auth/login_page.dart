@@ -15,12 +15,14 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _emailController = TextEditingController();
-    final _passwordController = TextEditingController();
+    // final _emailController = TextEditingController();
+    // final _passwordController = TextEditingController();
+
+    LoginBloc _bloc = BlocProvider.of<LoginBloc>(context);
 
     void onLogin() {
-      String email = _emailController.text;
-      String password = _passwordController.text;
+      String email = _bloc.emailController.text;
+      String password = _bloc.passwordController.text;
 
       showDialog(
         context: context,
@@ -128,7 +130,7 @@ class LoginPage extends StatelessWidget {
                   const SizedBox(height: 10.0),
                   ReusableTextField(
                     hintText: 'Enter your Email',
-                    controller: _emailController,
+                    controller: _bloc.emailController,
                     keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.next,
                   ),
@@ -137,7 +139,7 @@ class LoginPage extends StatelessWidget {
                   const SizedBox(height: 10.0),
                   ReusableTextField(
                     hintText: 'Enter your Password',
-                    controller: _passwordController,
+                    controller: _bloc.passwordController,
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.done,
                     obscureText: true,

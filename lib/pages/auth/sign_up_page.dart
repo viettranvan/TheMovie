@@ -6,47 +6,43 @@ import 'package:the_movie/pages/pages.dart';
 import 'package:the_movie/values/values.dart';
 import 'package:the_movie/widgets/widgets.dart';
 
-class SignUpPage extends StatefulWidget {
+class SignUpPage extends StatelessWidget {
   static const String id = 'sign_up';
 
   const SignUpPage({Key? key}) : super(key: key);
 
-  @override
-  State<SignUpPage> createState() => _SignUpPageState();
-}
 
-class _SignUpPageState extends State<SignUpPage> {
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _confirmController = TextEditingController();
-
-  bool obscureText = true;
-  bool obscureTextConfirm = true;
-
-  void onSingUp() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => const LoadingDialog(),
-    );
-
-    BlocProvider.of<SignUpBloc>(context).add(
-      SendSignUpRequest(
-          email: _emailController.text,
-          password: _passwordController.text,
-          confirm: _confirmController.text),
-    );
-  }
-  void gotoVerifyPage(Authentication auth) {
-    WidgetsBinding.instance!.addPostFrameCallback((_){
-      Navigator.pushNamedAndRemoveUntil(context,VerifyEmail.id,(Route<dynamic> route) => false,arguments: {
-        auth: auth
-      });
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
+
+    SignUpBloc _bloc =  BlocProvider.of<SignUpBloc>(context);
+
+    // bool obscureText = true;
+    // bool obscureTextConfirm = true;
+
+    void onSingUp() {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const LoadingDialog(),
+      );
+
+      _bloc.add(
+        SendSignUpRequest(
+            email: _bloc.emailController.text,
+            password: _bloc.passwordController.text,
+            confirm: _bloc.confirmController.text),
+      );
+    }
+    void gotoVerifyPage(Authentication auth) {
+      WidgetsBinding.instance!.addPostFrameCallback((_){
+        Navigator.pushNamedAndRemoveUntil(context,VerifyEmail.id,(Route<dynamic> route) => false,arguments: {
+          auth: auth
+        });
+      });
+    }
+
     void backToLogin() {
       Navigator.of(context).pushReplacementNamed(LoginPage.id);
     }
@@ -103,7 +99,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 const SizedBox(height: 10.0),
                 ReusableTextField(
                   hintText: 'Enter your Email',
-                  controller: _emailController,
+                  controller: _bloc.emailController,
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.next,
                 ),
@@ -112,10 +108,10 @@ class _SignUpPageState extends State<SignUpPage> {
                 const SizedBox(height: 10.0),
                 ReusableTextField(
                   hintText: 'Enter your Password',
-                  controller: _passwordController,
+                  controller: _bloc.passwordController,
                   keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.next,
-                  obscureText: obscureText,
+                  obscureText: true,
                   suffixIcon: true,
                 ),
                 const SizedBox(height: 20.0),
@@ -123,10 +119,10 @@ class _SignUpPageState extends State<SignUpPage> {
                 const SizedBox(height: 10.0),
                 ReusableTextField(
                   hintText: 'Confirm Password',
-                  controller: _confirmController,
+                  controller: _bloc.confirmController,
                   keyboardType: TextInputType.text,
                   textInputAction: TextInputAction.done,
-                  obscureText: obscureTextConfirm,
+                  obscureText: true,
                   suffixIcon: true,
                 ),
                 const SizedBox(height: 20.0),

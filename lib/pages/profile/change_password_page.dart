@@ -12,9 +12,9 @@ class ChangePasswordPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController _currentController = TextEditingController();
-    final TextEditingController _newController = TextEditingController();
-    final TextEditingController _confirmController = TextEditingController();
+    ProfileBloc _bloc = BlocProvider.of<ProfileBloc>(context);
+
+
 
     final auth = FirebaseAuth.instance;
 
@@ -22,14 +22,14 @@ class ChangePasswordPage extends StatelessWidget {
       showDialog(context: context, builder: (context) => const LoadingDialog());
       BlocProvider.of<ProfileBloc>(context).add(CheckErrorEvent(
         user: auth.currentUser,
-        currentPassword: _currentController.text,
-        newPassword: _newController.text,
-        confirmPassword: _confirmController.text,
+        currentPassword: _bloc.currentController.text,
+        newPassword: _bloc.newController.text,
+        confirmPassword: _bloc.confirmController.text,
       ));
     }
 
     onChangePasswordSuccess(BuildContext context) {
-      print('success');
+
       // back to profile page
       Navigator.of(context).pop();
 
@@ -52,7 +52,7 @@ class ChangePasswordPage extends StatelessWidget {
         content: 'Are you want to change your password?',
         onSubmit: () => BlocProvider.of<ProfileBloc>(context).add(
             ChangePasswordEvent(
-                user: auth.currentUser, newPassword: _newController.text)));
+                user: auth.currentUser, newPassword: _bloc.newController.text)));
 
     return Scaffold(
       appBar: AppBar(
@@ -100,7 +100,7 @@ class ChangePasswordPage extends StatelessWidget {
                 const Text('Current Password', style: kTextSize20w400White),
                 const SizedBox(height: 10.0),
                 ReusableTextField(
-                  controller: _currentController,
+                  controller: _bloc.currentController,
                   hintText: 'Enter your current Password',
                   obscureText: true,
                   textInputAction: TextInputAction.next,
@@ -110,7 +110,7 @@ class ChangePasswordPage extends StatelessWidget {
                 const Text('New Password', style: kTextSize20w400White),
                 const SizedBox(height: 10.0),
                 ReusableTextField(
-                    controller: _newController,
+                    controller: _bloc.newController,
                     hintText: 'Enter your new Password',
                     obscureText: true,
                     textInputAction: TextInputAction.next,
@@ -119,7 +119,7 @@ class ChangePasswordPage extends StatelessWidget {
                 const Text('Confirm Password', style: kTextSize20w400White),
                 const SizedBox(height: 10.0),
                 ReusableTextField(
-                    controller: _confirmController,
+                    controller: _bloc.confirmController,
                     hintText: 'Confirm Password',
                     obscureText: true,
                     textInputAction: TextInputAction.done,

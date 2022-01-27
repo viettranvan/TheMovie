@@ -11,6 +11,10 @@ import '../../blocs.dart';
 class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
   final AuthService authService;
 
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final confirmController = TextEditingController();
+
   SignUpBloc({required this.authService}) : super(SignUpInitial()) {
     on<SendSignUpRequest>(_onSendSignUpRequest);
   }
@@ -67,5 +71,13 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     return result;
   }
 
+  @override
+  Future<void> close() {
+    // TODO: implement close
+    emailController.dispose();
+    passwordController.dispose();
+    confirmController.dispose();
+    return super.close();
+  }
 
 }

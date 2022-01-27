@@ -40,24 +40,26 @@ class TheMovieApp extends StatelessWidget {
               child: const SignUpPage(),
             ),
         ForgotPasswordPage.id: (context) => BlocProvider(
-              create: (context) =>
-                  ForgotPasswordBloc(authService: AuthService()),
+              create: (context) => ForgotPasswordBloc(
+                authService: AuthService(),
+              ),
               child: const ForgotPasswordPage(),
             ),
         VerifyEmail.id: (context) => const VerifyEmail(),
+
         /// detail
         MovieDetailPage.id: (context) => BlocProvider(
               create: (context) => MovieDetailBloc(DetailRepository()),
               child: const MovieDetailPage(),
             ),
         TVSeriesDetailPage.id: (context) => BlocProvider(
-          create: (context) => TVSeriesDetailBloc(DetailRepository()),
-          child: const TVSeriesDetailPage(),
-        ),
+              create: (context) => TVSeriesDetailBloc(DetailRepository()),
+              child: const TVSeriesDetailPage(),
+            ),
         CastAndCrewPage.id: (context) => BlocProvider(
-          create: (context) => CastAndCrewBloc(),
-          child: const CastAndCrewPage(),
-        ),
+              create: (context) => CastAndCrewBloc(),
+              child: const CastAndCrewPage(),
+            ),
         CastDetailPage.id: (context) => const CastDetailPage(),
         CrewDetailPage.id: (context) => const CrewDetailPage(),
 

@@ -7,6 +7,11 @@ import 'package:the_movie/blocs/blocs.dart';
 import '../../validation/validation.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
+
+  final TextEditingController currentController = TextEditingController();
+  final TextEditingController newController = TextEditingController();
+  final TextEditingController confirmController = TextEditingController();
+
   ProfileBloc() : super(ProfileInitial()) {
     on<SaveProfileEvent>(_saveProfileEvent);
     on<CheckErrorEvent>(_onCheckErrorEvent);
@@ -97,4 +102,15 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
     return result;
   }
+
+  @override
+  Future<void> close() {
+    // TODO: implement close
+    currentController.dispose();
+    newController.dispose();
+    confirmController.dispose();
+
+    return super.close();
+  }
+
 }
