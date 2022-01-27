@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:the_movie/blocs/blocs.dart';
-import 'package:the_movie/pages/cast_and_crew/cast_view.dart';
 import 'package:the_movie/pages/pages.dart';
 import 'package:the_movie/repositories/cast_and_crew_repository.dart';
 import 'package:the_movie/values/values.dart';
-import 'package:the_movie/widgets/widgets.dart';
 
 class CastAndCrewPage extends StatelessWidget {
   static const String id = 'cast_and_crew_page';

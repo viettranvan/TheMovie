@@ -90,12 +90,10 @@ Future<bool> onWillPop(BuildContext context) {
   if (currentBackPressTime == null ||
       now.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
     currentBackPressTime = now;
-    print('vao dc day');
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
       content: Text('Press back again to exit', style: kTextSize18w400White),
       backgroundColor: AppColor.background,
     ));
-    // Fluttertoast.showToast(msg: "Press back again to exit");
     return Future.value(false);
   }
   return Future.value(true);

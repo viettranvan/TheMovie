@@ -1,5 +1,3 @@
-import 'package:the_movie/models/models.dart';
-
 class TVSeries{
   final int? id;
   final String? backdropPath;

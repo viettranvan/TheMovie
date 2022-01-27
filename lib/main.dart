@@ -2,8 +2,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:the_movie/blocs/blocs.dart';
-import 'package:the_movie/models/models.dart';
-import 'package:the_movie/pages/detail/tv_series_detail_page.dart';
 import 'package:the_movie/pages/pages.dart';
 import 'package:the_movie/repositories/repositories.dart';
 import 'package:the_movie/values/values.dart';

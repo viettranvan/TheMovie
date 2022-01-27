@@ -22,7 +22,7 @@ class AuthService {
     } on FirebaseAuthException catch (e) {
       return e;
     } catch (e) {
-      print('error: $e');
+      debugPrint('error: $e');
     }
   }
 
@@ -38,11 +38,11 @@ class AuthService {
       return Authentication(
           uid: uid, token: token, expiredToken: expirationTime);
     } on FirebaseAuthException catch (e) {
-      print('code: ${e.code}');
+      debugPrint('code: ${e.code}');
 
       return e;
     } catch (e) {
-      print('error: $e');
+      debugPrint('error: $e');
     }
   }
 
@@ -55,7 +55,7 @@ class AuthService {
     } on FirebaseAuthException catch (e) {
       return e;
     } catch (e) {
-      print('error: $e');
+      debugPrint('error: $e');
     }
   }
 

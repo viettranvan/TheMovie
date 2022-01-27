@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:the_movie/models/models.dart';
-import 'package:the_movie/pages/detail/cast_detail_page.dart';
 import 'package:the_movie/pages/pages.dart';
 
 import '../../values/values.dart';

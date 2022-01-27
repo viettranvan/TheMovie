@@ -1,4 +1,3 @@
-import 'package:the_movie/models/models.dart';
 
 abstract class ForgotPasswordState{}
 
