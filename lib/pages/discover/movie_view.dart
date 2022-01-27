@@ -30,6 +30,13 @@ class MovieView extends StatelessWidget {
         switch (state.runtimeType) {
           case DiscoverMovieListEmpty:
             return EmptyList(text: (state as DiscoverMovieListEmpty).text);
+          case DiscoverMovieLoadFailure:
+            return const Center(
+              child: Text(
+                'Error load movie',
+                style: kTextSize20w400White,
+              ),
+            );
           case DiscoverMovieListLoaded:
             return SmartRefresher(
               enablePullDown: false,

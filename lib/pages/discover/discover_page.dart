@@ -109,7 +109,14 @@ class DiscoverPage extends StatelessWidget {
                           )..add(MovieFetchingEvent()),
                           child: const MovieView(),
                         ),
-                        const TVSeriesView(),
+                        BlocProvider(
+                          create: (context) => DiscoverTVSeriesViewBloc(
+                              DiscoverRepository(),
+                              discoverBloc,
+                              RefreshController()
+                          )..add(TVSeriesFetchingEvent()),
+                          child: const TVSeriesView(),
+                        ),
                         const DocumentaryView(),
                         const SportView(),
                       ],

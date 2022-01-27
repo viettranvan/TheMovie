@@ -14,9 +14,9 @@ class RelativeTVShowView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    void gotoDetail(int idMovie){
+    void gotoDetail(int idTv){
       Navigator.of(context)
-          .pushNamed(MovieDetailPage.id, arguments: {argsKeyMovieId: idMovie});
+          .pushNamed(TVSeriesDetailPage.id, arguments: {argsKeyTvSeriesId: idTv});
     }
 
     return relativeTvShows.isNotEmpty

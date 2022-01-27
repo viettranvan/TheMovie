@@ -32,7 +32,7 @@ class DetailRepository {
   Future<TVSeriesDetail> getTVDetail({required int tvId}) =>
       _tvSeriesAPI.getTVDetail(tvId: tvId);
 
-  Future<List<Cast>> getCasFromTVSeries({required int idTv}) =>
+  Future<List<Cast>> getCastFromTVSeries({required int idTv}) =>
       _creditAPI.getCastFromTVSeries(idTvSeries: idTv);
 
   Future<List<Crew>> getCrewFromTVSeries({required int idTv}) =>

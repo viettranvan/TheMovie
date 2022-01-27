@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 
 import '../values/values.dart';
 
@@ -11,8 +12,9 @@ class EmptyList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Text(
-        '$text will be updated soon!',
+        'No result found!\n$text will be updated soon!',
         style: kTextSize20w400White,
+        textAlign: TextAlign.center,
       ),
     );
   }

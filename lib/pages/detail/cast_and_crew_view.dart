@@ -24,7 +24,7 @@ class CastAndCrewView extends StatelessWidget {
       Navigator.of(context).pushNamed(CrewDetailPage.id, arguments: crew);
     }
 
-    return (casts.length + crews.length) > 10
+    return (casts.length + crews.length) != 0
         ? SizedBox(
             height: 150.0,
             child: ListView.builder(
@@ -33,7 +33,7 @@ class CastAndCrewView extends StatelessWidget {
                   ? 10
                   : (casts.length + crews.length),
               itemBuilder: (context, index) {
-                if (index > casts.length) {
+                if (index >= casts.length) {
                   return GestureDetector(
                     onTap: () => gotoCrewDetail(crews[index - casts.length]),
                     child: CastAndCrewCard(
@@ -44,14 +44,16 @@ class CastAndCrewView extends StatelessWidget {
                         name: '${crews[index - casts.length].name}'),
                   );
                 }
-                return GestureDetector(
-                  onTap: () => gotoCastDetail(casts[index]),
-                  child: CastAndCrewCard(
-                      avatar: casts[index].profilePath == null
-                          ? noProfileImage
-                          : baseUrlImage + '${casts[index].profilePath}',
-                      name: '${casts[index].name}'),
-                );
+                return casts.isNotEmpty
+                    ? GestureDetector(
+                        onTap: () => gotoCastDetail(casts[index]),
+                        child: CastAndCrewCard(
+                            avatar: casts[index].profilePath == null
+                                ? noProfileImage
+                                : baseUrlImage + '${casts[index].profilePath}',
+                            name: '${casts[index].name}'),
+                      )
+                    : const SizedBox();
               },
             ),
           )

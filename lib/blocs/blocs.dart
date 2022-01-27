@@ -49,9 +49,9 @@ export 'discover/movie_view/discover_movie_view_state.dart';
 export 'discover/movie_view/discover_movie_view_event.dart';
 
 /// Discover -> Tv series view
-export 'discover/tv_series_view/tv_series_bloc.dart';
-export 'discover/tv_series_view/tv_series_event.dart';
-export 'discover/tv_series_view/tv_series_state.dart';
+export 'discover/tv_series_view/discover_tv_series_bloc.dart';
+export 'discover/tv_series_view/discover_tv_series_event.dart';
+export 'discover/tv_series_view/discover_tv_series_state.dart';
 
 
 /// Home bloc

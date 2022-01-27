@@ -2,6 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:the_movie/blocs/blocs.dart';
+import 'package:the_movie/models/models.dart';
+import 'package:the_movie/pages/detail/tv_series_detail_page.dart';
 import 'package:the_movie/pages/pages.dart';
 import 'package:the_movie/repositories/repositories.dart';
 import 'package:the_movie/values/values.dart';
@@ -48,20 +50,16 @@ class TheMovieApp extends StatelessWidget {
               create: (context) => MovieDetailBloc(DetailRepository()),
               child: const MovieDetailPage(),
             ),
+        TVSeriesDetailPage.id: (context) => BlocProvider(
+          create: (context) => TVSeriesDetailBloc(DetailRepository()),
+          child: const TVSeriesDetailPage(),
+        ),
         CastAndCrewPage.id: (context) => BlocProvider(
           create: (context) => CastAndCrewBloc(),
           child: const CastAndCrewPage(),
         ),
         CastDetailPage.id: (context) => const CastDetailPage(),
         CrewDetailPage.id: (context) => const CrewDetailPage(),
-        // CastDetailPage.id: (context) => BlocProvider(
-        //   create: (context) => (),
-        //   child: const CastDetailPage(),
-        // ),
-        // CrewDetailPage.id: (context) => BlocProvider(
-        //   create: (context) => (),
-        //   child: const CrewDetailPage(),
-        // ),
 
         ChangePasswordPage.id: (context) => BlocProvider(
               create: (context) => ProfileBloc(),
