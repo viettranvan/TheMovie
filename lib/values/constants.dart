@@ -37,6 +37,7 @@ Map<String,dynamic> paramWithPage({required int page}) {
   return {
     "api_key": apiKey,
     "language": 'en-US',
+    "page": page
   };
 }
 

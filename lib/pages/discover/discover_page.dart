@@ -1,35 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:the_movie/pages/pages.dart';
+import 'package:the_movie/repositories/repositories.dart';
 import 'package:the_movie/values/values.dart';
 
-class DiscoverPage extends StatefulWidget {
+import '../../blocs/blocs.dart';
+
+class DiscoverPage extends StatelessWidget {
   const DiscoverPage({Key? key}) : super(key: key);
 
   @override
-  State<DiscoverPage> createState() => _DiscoverPageState();
-}
-
-class _DiscoverPageState extends State<DiscoverPage> {
-  final _searchController = TextEditingController();
-
-  List<Tab> discoverTabs = const <Tab>[
-    Tab(text: 'Movies'),
-    Tab(text: 'Tv Series'),
-    Tab(text: 'Documentary'),
-    Tab(text: 'Sports'),
-  ];
-
-  int _currentIndex = 0;
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    _searchController.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    DiscoverBloc discoverBloc = BlocProvider.of<DiscoverBloc>(context);
+
+    List<Tab> discoverTabs = const <Tab>[
+      Tab(text: 'Movies'),
+      Tab(text: 'Tv Series'),
+      Tab(text: 'Documentary'),
+      Tab(text: 'Sports'),
+    ];
+
+    _onSearchMovie(String query) {
+      discoverBloc.add(OnSearch(query: query));
+    }
+
+    void _onClearSearch() {
+      discoverBloc.add(OnClear());
+    }
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -44,24 +43,36 @@ class _DiscoverPageState extends State<DiscoverPage> {
                 ],
               ),
               const SizedBox(height: 20.0),
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'Sherlock Holmes',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25.0),
-                    borderSide: BorderSide.none,
-                  ),
-                  prefixIcon: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 15.0),
-                    child:
-                        Icon(Icons.search, color: AppColor.white, size: 30.0),
-                  ),
-                  filled: true,
-                  fillColor: AppColor.searchTextField,
-                ),
+              BlocBuilder<DiscoverBloc, DiscoverState>(
+                builder: (context, state) {
+                  return TextField(
+                    controller: discoverBloc.search,
+                    onChanged: _onSearchMovie,
+                    decoration: InputDecoration(
+                      hintText: 'Sherlock Holmes',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25.0),
+                        borderSide: BorderSide.none,
+                      ),
+                      prefixIcon: const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 15.0),
+                        child: Icon(Icons.search,
+                            color: AppColor.white, size: 30.0),
+                      ),
+                      suffixIcon: discoverBloc.search.text.isEmpty
+                          ? null
+                          : GestureDetector(
+                              onTap: () => _onClearSearch(),
+                              child: const Icon(Icons.clear,
+                                  size: 30.0, color: AppColor.white),
+                            ),
+                      filled: true,
+                      fillColor: AppColor.searchTextField,
+                    ),
+                  );
+                },
               ),
-              const SizedBox(height: 20.0),
-
+              const SizedBox(height: 10.0),
               DefaultTabController(
                 length: discoverTabs.length,
                 child: TabBar(
@@ -77,27 +88,35 @@ class _DiscoverPageState extends State<DiscoverPage> {
                     borderSide: BorderSide(color: AppColor.iconColorStart),
                     insets: EdgeInsets.only(right: 30.0),
                   ),
-                  onTap: (int index){
-                    setState(() {
-                      _currentIndex = index;
-                    });
+                  onTap: (int index) {
+                    BlocProvider.of<DiscoverBloc>(context)
+                        .add(OnChangeTabDiscover(index: index));
                   },
                 ),
-
               ),
-              Expanded(child:
-                IndexedStack(
-                  index: _currentIndex,
-                  children: const [
-                    MovieView(),
-                    TVSeriesView(),
-                    DocumentaryView(),
-                    SportView(),
-
-                  ],
-                ),
+              const SizedBox(height: 10.0),
+              BlocBuilder<DiscoverBloc, DiscoverState>(
+                builder: (context, state) {
+                  return Expanded(
+                    child: IndexedStack(
+                      index: (state as InitDiscover).index,
+                      children: [
+                        BlocProvider(
+                          create: (context) => DiscoverMovieViewBloc(
+                            DiscoverRepository(),
+                            discoverBloc,
+                            RefreshController()
+                          )..add(MovieFetchingEvent()),
+                          child: const MovieView(),
+                        ),
+                        const TVSeriesView(),
+                        const DocumentaryView(),
+                        const SportView(),
+                      ],
+                    ),
+                  );
+                },
               ),
-
             ],
           ),
         ),

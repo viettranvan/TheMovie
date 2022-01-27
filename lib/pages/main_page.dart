@@ -52,7 +52,10 @@ class _MainPageState extends State<MainPage> {
               create: (context) => HomeMovieBloc(HomeRepository()),
               child: const HomePage(),
             ),
-            const DiscoverPage(),
+            BlocProvider(
+              create: (context) => DiscoverBloc(search: TextEditingController()),
+              child: const DiscoverPage(),
+            ),
             MultiBlocProvider(
               providers: [
                 BlocProvider(

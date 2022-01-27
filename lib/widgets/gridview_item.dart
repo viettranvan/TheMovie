@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:the_movie/values/values.dart';
 
@@ -17,25 +18,32 @@ class GridViewItem extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(20.0),
-            child: FadeInImage(
-              image: NetworkImage(poster),
-              fit: BoxFit.cover,
-              placeholder: placeholderImage,
+          child: SizedBox(
+            width: double.infinity,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20.0),
+              child: FadeInImage(
+                image: NetworkImage(poster),
+                fit: BoxFit.cover,
+                placeholder: placeholderImage,
+              ),
             ),
           ),
         ),
-        const SizedBox(height: 10.0),
-        Text(
-          name,
-          style: kTextSize12w400White,
-          overflow: TextOverflow.ellipsis,
-          maxLines: 2,
+
+        Container(
+          alignment: Alignment.centerLeft,
+          constraints: const BoxConstraints(minHeight: 60),
+          padding: const EdgeInsets.only(bottom: 10, top: 5),
+          child: Text(
+            name,
+            style: kTextSize15w400White,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 2,
+          ),
         ),
         const SizedBox(height: 10.0),
       ],
-
     );
   }
 }

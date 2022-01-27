@@ -38,7 +38,23 @@ export 'detail/tv_series_detail/tv_series_detail_bloc.dart';
 export 'detail/tv_series_detail/tv_series_detail_state.dart';
 export 'detail/tv_series_detail/tv_series_detail_event.dart';
 
-/// Movie bloc
+/// Discover
+export 'discover/discover_bloc.dart';
+export 'discover/discover_event.dart';
+export 'discover/discover_state.dart';
+
+/// Discover -> Movie view
+export 'discover/movie_view/discover_movie_view_bloc.dart';
+export 'discover/movie_view/discover_movie_view_state.dart';
+export 'discover/movie_view/discover_movie_view_event.dart';
+
+/// Discover -> Tv series view
+export 'discover/tv_series_view/tv_series_bloc.dart';
+export 'discover/tv_series_view/tv_series_event.dart';
+export 'discover/tv_series_view/tv_series_state.dart';
+
+
+/// Home bloc
 export 'home/home_movie_bloc.dart';
 export 'home/home_movie_event.dart';
 export 'home/home_movie_state.dart';
