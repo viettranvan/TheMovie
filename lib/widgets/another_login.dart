@@ -41,7 +41,7 @@ class AnotherLoginMethod extends StatelessWidget {
           gotoMainPage();
         }
       } catch (e) {
-        debugPrint(e.toString());
+        debugPrint('viet oi day ne:' + e.toString());
       }
     }
 
